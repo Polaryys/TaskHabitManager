@@ -1,13 +1,16 @@
 package main.java.com.proyecto.Modelos;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Actividad {
     private int id;
     private String nombre;
     private String estado;
-    private String fecha;
-    private String hora;
+    private LocalDate fecha;
+    private LocalTime hora;
 
-    public Actividad(int id, String nombre, String estado, String fecha, String hora) {
+    public Actividad(int id, String nombre, String estado, LocalDate fecha, LocalTime hora) {
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;
@@ -24,9 +27,9 @@ public class Actividad {
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 
-    public String getFecha() { return fecha; }
-    public void setFecha(String fecha) { this.fecha = fecha; }
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
-    public String getHora() { return hora; }
-    public void setHora(String hora) { this.hora = hora; }
+    public LocalTime getHora() { return hora; }
+    public void setHora(LocalTime hora) { this.hora = hora; }
 }
