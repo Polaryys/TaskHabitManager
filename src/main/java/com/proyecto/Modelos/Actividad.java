@@ -51,6 +51,9 @@ public class Actividad {
         System.out.println();
         System.out.println("mas adelate se integrara con el gestor posteriormete");
 
+    }
 
+    public static void main(String[] args) {
+        Actividad.mostrarReporte();
     }
 }
