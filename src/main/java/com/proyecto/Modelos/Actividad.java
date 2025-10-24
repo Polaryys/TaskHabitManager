@@ -35,12 +35,12 @@ public class Actividad {
 
     public static void mostrarReporte() {
         LocalDate hoy = LocalDate.now();
-        LocalDate inicioSemana = hoy.minusDays(hoy.getDayOfWeek().getValue() - 1); 
+        LocalDate inicioSemana = hoy.minusDays(hoy.getDayOfWeek().getValue() - 0); 
         LocalDate finSemana = inicioSemana.plusDays(6);
         
         System.out.println("estructura del reporte semanal ");
         System.out.println("---------------------------------------");
-        System.out.println("periodo: " + inicioSemana + "al" + finSemana);
+        System.out.println("periodo: " + inicioSemana + " al " + finSemana);
         System.out.println();
         System.out.println(" partes del reporte completo");
         System.out.println(" perido semanal calculando en proceso.....");
