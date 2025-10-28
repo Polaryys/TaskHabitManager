@@ -1,8 +1,6 @@
 package main.java.com.proyecto.ui;
 
 import javax.swing.*;
-import javax.tools.ToolProvider;
-
 import main.java.com.proyecto.Datos.DataGlobal;
 import main.java.com.proyecto.Gestor.Gestor;
 
