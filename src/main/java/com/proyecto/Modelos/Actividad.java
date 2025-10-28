@@ -6,8 +6,6 @@ import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Actividad {
 
@@ -80,48 +78,111 @@ public class Actividad {
             System.out.println("-----------------------------------------------------");
             System.out.printf("Periodo: %s al %s%n", inicio.format(fmt), fin.format(fmt));
             System.out.printf("Generando: %s %s%n", 
-            LocalDate.now().format(fmt), 
-            LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))); 
+                LocalDate.now().format(fmt), 
+                LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))); 
             System.out.println();
         }
 
-        // resumen fomal 
+        // resumen formal 
+        private static void mostrarResumen(List<Tarea> tareas, list<Habito> habitos) {
+            long tareasComp = contarCompletados(tareas); 
+            long habitosComp = contarCompletados(habitos); 
 
-        // mostrar un ejemplo de tarea 
-        mostrarTareas(tareasEjemplo); 
-        System.out.println();
+            System.out.println(" resumen  ");
+            System.out.println("-----------------------------------------------------");
+            System.out.printf("- Tareas: %d/%d completadas (%.0f%%)%n",
+                tareasComp, tareas.size(), calcularPorcentaje (tareasComp, tareas.size()));
+            System.out.printf("- Habitos: %d/%d completados (%.0f%%)%n", 
+                habitosComp, habitos.size(), calcularPorcentaje(habitosComp, habitos.size()));
+            System.out.printf("- Productividad general: %.0f%%%n", 
+                calcularPorcentaje(tareasComp + habitosComp, tareas.size() + habitos.size()));
+            System.out.println();
+        }
 
-        // mostrar ejemplos de habitos. 
-        mostrarHabitos(habitosEjemplo); 
-        System.out.println();
+        private static void mostrarDetalles(List<Tarea> tareas, List <Habito> habitos) {
+            mostrarTareas(tareas);
+            mostrarHabitos(habitos);
+            mostrarRecomendaciones(tareas, habitos);
+        }
 
-        // mostrar una estadistica
-        mostrarEstadistica(tareasEjemplo, habitosEjemplo); 
-    
+        // tareas formales: 
+        private static void mostrarTareas(List<Tarea> tareas) {
+        System.out.println("TAREAS (Agrupadas por Prioridad)");
+        System.out.println("--------------------------------------------");
+
+        if (tareas.isEmpty()) {
+            System.out.println("no hay tareas registradadas esta semana\n");
+            return;
+        }
+
+         Map<Tarea.Priority, List<Tarea>> porPrioridad = tareas.stream()
+                .collect(Collectors.groupingBy(Tarea::getPrioridad));
+        
+        mostrarGrupoTareas("ALTA PRIORIDAD", porPrioridad.get(Tarea.Priority.ALTA));
+        mostrarGrupoTareas("MEDIA PRIORIDAD", porPrioridad.get(Tarea.Priority.MEDIA));
+        mostrarGrupoTareas("BAJA PRIORIDAD", porPrioridad.get(Tarea.Priority.BAJA));
     }
 
-    // se crean alfunas tareas como por ejemplo: 
-     private static List<Tarea> crearTareas() {
-        List<Tarea> tareas = new ArrayList<>(); 
+        private static void mostrarGrupoTareas(String titulo, List<Tarea> tareas) {
+            if (tareas != null && !tareas.isEmpty()) {
+            System.out.println(titulo + ":");
+            for (Tarea tarea : tareas) {
+                String estado = (tarea.getEstado() == State.COMPLETADO) ? "[COMPLETADA]" : "[PENDIENTE]";
+                System.out.printf("   %s %s - %s%n", 
+                    estado, tarea.getNombre(), tarea.getDescripcion());
+                }
 
-        tareas.add(new Tarea(1, "Repaso de matematicas", State.COMPLETADO, LocalDate.now(),
-         LocalTime.now(), "suma y restas", Tarea.Priority.ALTA)); 
-        tareas.add(new Tarea(2, "Hacer ejercicio", State.PENDIENTE, LocalDate.now(),
-         LocalTime.now(), "Ir al gimnasio", Tarea.Priority.MEDIA)); 
-        return tareas;
+            }
+        }
 
-     }
-     // se crean algunos habitos de ejemplo: 
-     private static List<Habito> crearHabitos() {
-        List<Habito> habitos = new ArrayList<>(); 
-        habitos.add(new Habito(1, "Leer 30 minutos", State.COMPLETADO, LocalDate.now(),
-         LocalTime.now(), Habito.Frequency.DIARIO));
+        // recomendaciones 
+        private static void mostrarRecomendaciones(List<Tarea> tareas, List<Habito> habitos) {
+            long tareasAltasPend = tareas.stream()
+                .filter(t -> t.getPrioridad() == Tarea.Priority.ALTA && t.getEstado() == State.PENDIENTE)
+                .count();
+            long tareasPend = contarPendientes(tareas);
+            long habitosPend = contarPendientes(habitos);
 
-        habitos.add(new Habito(2, "Correr", State.PENDIENTE, LocalDate.now(),
-         LocalTime.now(), Habito.Frequency.SEMANAL));
-        return habitos;
-     }
-     // mostrar lista de tareas 
+            System.out.println("\nRECOMENDACIONES");
+            System.out.println("--------------------------------------------");
+
+            if (tareasAltasPend > 0) 
+            System.out.println(" Prioriza " + tareasAltasPend + " tareas de ALTA prioridad pendientes");
+            if (tareasPend > 3) 
+            System.out.println(" Considerar dividir " + tareasPend + " tareas pendientes en pasos mas pequenos");
+            if (habitosPend > 0) 
+            System.out.println(" Enfocarse en completar " + habitosPend + " habitos pendientes");
+            if (tareasAltasPend == 0 && tareasPend == 0 && habitosPend == 0) 
+            System.out.println(" Excelente trabajo Manten este ritmo de productividad");
+
+            System.out.println();
+        }
+
+        private static long contarCompletados(List<? extends Actividad> actividades) {
+        return actividades.stream().filter(a -> a.getEstado() == State.COMPLETADO).count();
+    }
+
+        private static long contarPendientes(List<? extends Actividad> actividades) {
+        return actividades.stream().filter(a -> a.getEstado() == State.PENDIENTE).count();
+    }
+
+        private static double calcularPorcentaje(long completados, long total) {
+        return total > 0 ? (completados * 100.0 / total) : 0;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Preparando el reporte semanal\n");
+
+        List<Tarea> tareas = cargarDesdeCSV("Tareas.csv", Actividad::crearTarea);
+        list<Habito> habitos = cargarDesdeCSV("Habitos.csv", Actividad::crearHabito);
+
+        System.out.printf("Datos cargados: %d tareas, %d habitos%n%n", tareas.size(), habitos.size());
+        generarReporteSemanal(tareas, habitos);
+        System.out.println("Reporte Generado con exito");
+    }
+
+    // para traer los datos de los archivos csv.
+
      private static void mostrarTareas(List<Tarea> tareas) {
         System.out.println("Tareas");
         if (tareas.isEmpty()) {
@@ -174,7 +235,4 @@ public class Actividad {
         System.out.printf("   Habitos completados: %d de %d%n", habitosCompletados, habitos.size());
      }
 
-    public static void main(String[] args) {
-        Actividad.mostrarReporte();
-    }
-}
+    
