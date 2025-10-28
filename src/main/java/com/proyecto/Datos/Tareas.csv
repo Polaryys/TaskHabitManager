@@ -1,1 +1,6 @@
-781,Mate,Suma,BAJA,PENDIENTE,06:00,2025-11-02
+id,nombre,estado,fecha,hora,descripcion,prioridad
+1,Estudiar para el examen,COMPLETADO,2024-01-15,09:00,Repasar temas de Java,ALTA
+2,Hacer ejercicio,PENDIENTE,2024-01-16,18:30,Ir al gimnasio por 1 hora,MEDIA
+3,Comprar víveres,PENDIENTE,2024-01-17,16:00,Comprar frutas y verduras,BAJA
+4,Reunión de proyecto,COMPLETADO,2024-01-18,14:00,Presentar avances del proyecto,ALTA
+5,Limpiar la habitación,PENDIENTE,2024-01-19,10:00,Organizar escritorio y ropa,BAJA
