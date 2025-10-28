@@ -3,7 +3,7 @@ import main.java.com.proyecto.Modelos.*;
 import java.io.*;
 
 public class DataGlobal {
-    private static final String FILE_PATH = "Tareas.csv";
+    private static final String FILE_PATH = System.getProperty("user.dir") + "/src/main/java/com/proyecto/Datos/Tareas.csv";
 
     public void guardarTarea(Tarea tarea) {
         try {
