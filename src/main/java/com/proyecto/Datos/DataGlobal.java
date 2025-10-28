@@ -3,13 +3,11 @@ import main.java.com.proyecto.Modelos.*;
 import java.io.*;
 
 public class DataGlobal {
-    private static final String FILE_PATH = "Datos/Tareas.csv";
+    private static final String FILE_PATH = "Tareas.csv"; // ahora en la misma carpeta
 
     public void guardarTarea(Tarea tarea) {
         try {
-            File folder = new File("Datos");
-            if (!folder.exists()) folder.mkdir();
-
+            // ya no creamos carpeta, el archivo estará en la misma carpeta
             FileWriter writer = new FileWriter(FILE_PATH, true);
             writer.write(String.format("%d,%s,%s,%s,%s,%s,%s%n",
                     tarea.getId(),
@@ -19,7 +17,7 @@ public class DataGlobal {
                     tarea.getEstado(),
                     tarea.getHora(),
                     tarea.getFecha()
-                    ));
+            ));
             writer.close();
         } catch (IOException e) {
             System.err.println("Error al guardar la tarea: " + e.getMessage());
