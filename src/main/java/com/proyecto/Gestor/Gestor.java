@@ -2,32 +2,46 @@ package main.java.com.proyecto.Gestor;
 
 import main.java.com.proyecto.Modelos.Tarea;
 import main.java.com.proyecto.Modelos.Actividad;
+import main.java.com.proyecto.Datos.DataGlobal;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 public class Gestor {
-    private List<Tarea> listaTareas = new ArrayList<>();
-    private int count = 1;
 
-    public void createTask(String nombre, String descripcion, Tarea.Priority prioridad,
-        LocalDate fecha, LocalTime hora){
+    private Random random;
+    private DataGlobal dataGlobal;
 
-            Tarea Task = new Tarea(
-                count++,
+    public Gestor(DataGlobal dataGlobal) {
+        random = new Random();
+        this.dataGlobal = dataGlobal;
+    }
+
+    private int generarIdAleatorio() {
+        return random.nextInt(1001);
+    }
+
+    public Tarea createTask(String nombre,
+                                    String descripcion,
+                                    Tarea.Priority prioridad,
+                                    LocalDate fecha,
+                                    LocalTime hora) {
+
+        Tarea tarea = new Tarea(
+                generarIdAleatorio(),
                 nombre,
                 Actividad.State.PENDIENTE,
                 fecha,
                 hora,
                 descripcion,
                 prioridad
-            );
+        );
 
-            listaTareas.add(Task);
+        dataGlobal.guardarTarea(tarea);
 
-            }
-        }
+        return tarea;
+    }
+}
 
 

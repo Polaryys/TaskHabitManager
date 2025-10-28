@@ -1,8 +1,7 @@
 package main.java.com.proyecto.ui;
 
 import javax.swing.*;
-import javax.tools.ToolProvider;
-
+import main.java.com.proyecto.Datos.DataGlobal;
 import main.java.com.proyecto.Gestor.Gestor;
 
 import java.awt.*;
@@ -16,7 +15,8 @@ public class Main extends JFrame{
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        gestor = new Gestor();;
+        DataGlobal dataGlobal = new DataGlobal();
+        gestor = new Gestor(dataGlobal);;
 
         JButton NewTask = new JButton("Crear Tarea");
 

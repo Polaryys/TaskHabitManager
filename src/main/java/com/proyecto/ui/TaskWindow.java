@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import main.java.com.proyecto.Modelos.*;
 import main.java.com.proyecto.Gestor.*;
 
@@ -51,9 +50,10 @@ public class TaskWindow extends JDialog{
                 LocalDate fecha = LocalDate.parse(txtDate.getText());
                 LocalTime hora = LocalTime.parse(txtHour.getText());
                 
-                gestor.createTask(nombre, descripcion, prioridad, fecha, hora);
+                Tarea nuevaTarea = gestor.createTask(nombre, descripcion, prioridad, fecha, hora);
 
-                JOptionPane.showMessageDialog(this, "tarea Creada");
+                JOptionPane.showMessageDialog(this,
+                        "Tarea creada exitosamente.\nID: " + nuevaTarea.getId());
                 dispose();
 
             } catch (Exception ex){
