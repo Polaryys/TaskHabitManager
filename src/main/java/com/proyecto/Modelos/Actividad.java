@@ -2,6 +2,10 @@ package main.java.com.proyecto.Modelos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.DayOfWeek;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,22 +44,48 @@ public class Actividad {
     public LocalTime getHora() { return hora; }
     public void setHora(LocalTime hora) { this.hora = hora; }
 
-    public static void mostrarReporte() {
+    public static void mostrarReporteSemanal(List<Tarea> tareas, List<Habito> habitos) {
 
-        // Crear datos para simular el reporte tanto en: 
-
-        List<Tarea> tareasEjemplo = crearTareas();
-        List<Habito> habitosEjemplo = crearHabitos(); 
-
+       
+        if (tareas == null || habitos == null) {
+            System.out.println("Error: Datos no disponibles");
+            return;
+        } 
 
         LocalDate hoy = LocalDate.now();
-        LocalDate inicioSemana = hoy.minusDays(hoy.getDayOfWeek().getValue() - 1); 
-        LocalDate finSemana = inicioSemana.plusDays(6);
-        
-        System.out.println("estructura del reporte semanal ");
-        System.out.println("---------------------------------------");
-        System.out.println("periodo: " + inicioSemana + " al " + finSemana);
-        System.out.println();
+        LocalDate inicioSemana = hoy.with(DayOfWeek.MONDAY);
+        LocalDate finSemana = hoy.with(DayOfWeek.SATURDAY);
+
+        // filtro para actividades de toda la semana
+        List<Tarea> tareasSemana = filtrarPorSemana(tareas, inicioSemana, finSemana);
+        List<Habito> habitosSemana = filtrarPorSemana(habitos, inicioSemana, finSemana);
+
+        // generar el reporte 
+        mostrarEncabezado(inicioSemana, finSemana); 
+        mostrarResumen(tareasSemana, habitosSemana); 
+        mostrarDetalles(tareasSemana, habitosSemana); 
+
+        //filtro
+        private static <T extends Actividad> List<T> filtrarPorSemana(List<T> actividades, LocalDate inicio, LocalDate fin) {
+            return actividades.stream()
+                    .filter(a -> !a.getFecha().isBefore(inicio) && !a.getFecha().isAfter(fin))
+                    .collect(Collectors.toList());
+        }
+
+        // encabezado 
+        private static  void mostrarEncabezado(LocalDate inicio, LocalDate fin) {
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            System.out.println("-----------------------------------------------------");
+            System.out.println("       reporte semanal         ");
+            System.out.println("-----------------------------------------------------");
+            System.out.printf("Periodo: %s al %s%n", inicio.format(fmt), fin.format(fmt));
+            System.out.printf("Generando: %s %s%n", 
+            LocalDate.now().format(fmt), 
+            LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))); 
+            System.out.println();
+        }
+
+        // resumen fomal 
 
         // mostrar un ejemplo de tarea 
         mostrarTareas(tareasEjemplo); 
