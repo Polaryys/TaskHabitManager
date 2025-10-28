@@ -57,7 +57,7 @@ public class Actividad {
         System.out.println("periodo: " + inicioSemana + " al " + finSemana);
         System.out.println();
 
-        // mostrar un ejemplo de tarea real 
+        // mostrar un ejemplo de tarea 
         mostrarTareas(tareasEjemplo); 
         System.out.println();
 
