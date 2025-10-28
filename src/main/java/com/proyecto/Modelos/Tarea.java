@@ -4,11 +4,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Tarea extends Actividad {
-    private String descripcion;
-    private int prioridad;
+    public enum Priority{
+        BAJA,
+        MEDIA,
+        ALTA
+    }
 
-    public Tarea(int id, String nombre, String estado, LocalDate fecha, LocalTime hora,
-                 String descripcion, int prioridad) {
+    private String descripcion;
+    private Priority prioridad;
+
+    public Tarea(int id, String nombre, State estado, LocalDate fecha, LocalTime hora,
+                 String descripcion, Priority prioridad) {
         super(id, nombre, estado, fecha, hora);
         this.descripcion = descripcion;
         this.prioridad = prioridad;
@@ -17,6 +23,6 @@ public class Tarea extends Actividad {
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public int getPrioridad() { return prioridad; }
-    public void setPrioridad(int prioridad) { this.prioridad = prioridad; }
+    public Priority getPrioridad() { return prioridad; }
+    public void setPrioridad(Priority prioridad) { this.prioridad = prioridad; }
 }
