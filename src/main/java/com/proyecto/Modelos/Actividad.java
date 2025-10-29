@@ -77,9 +77,9 @@ public class Actividad {
         // encabezado 
         private static  void mostrarEncabezado(LocalDate inicio, LocalDate fin) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            System.out.println("-----------------------------------------------------");
-            System.out.println("       reporte semanal         ");
-            System.out.println("-----------------------------------------------------");
+            System.out.println("------------------------------------------------");
+            System.out.println("                reporte semanal         ");
+            System.out.println("------------------------------------------------");
             System.out.printf("Periodo: %s al %s%n", inicio.format(fmt), fin.format(fmt));
             System.out.printf("Generando: %s %s%n", 
                 LocalDate.now().format(fmt), 
@@ -92,8 +92,8 @@ public class Actividad {
             long tareasComp = contarCompletados(tareas); 
             long habitosComp = contarCompletados(habitos); 
 
-            System.out.println(" resumen  ");
-            System.out.println("-----------------------------------------------------");
+            System.out.println("                    RESUMEN                  ");
+            System.out.println("------------------------------------------------");
             System.out.printf("- Tareas: %d/%d completadas (%.0f%%)%n",
                 tareasComp, tareas.size(), calcularPorcentaje (tareasComp, tareas.size()));
             System.out.printf("- Habitos: %d/%d completados (%.0f%%)%n", 
@@ -111,7 +111,7 @@ public class Actividad {
 
         // tareas formales: 
         private static void mostrarTareas(List<Tarea> tareas) {
-        System.out.println("TAREAS (Agrupadas por Prioridad)");
+        System.out.println("       TAREAS (Agrupadas por Prioridad     )");
         System.out.println("--------------------------------------------");
 
         if (tareas.isEmpty()) {
@@ -123,8 +123,8 @@ public class Actividad {
                 .collect(Collectors.groupingBy(Tarea::getPrioridad));
         
         mostrarGrupoTareas("ALTA PRIORIDAD", porPrioridad.get(Tarea.Priority.ALTA));
-        mostrarGrupoTareas("MEDIA PRIORIDAD", porPrioridad.get(Tarea.Priority.MEDIA));
-        mostrarGrupoTareas("BAJA PRIORIDAD", porPrioridad.get(Tarea.Priority.BAJA));
+        mostrarGrupoTareas("\nMEDIA PRIORIDAD", porPrioridad.get(Tarea.Priority.MEDIA));
+        mostrarGrupoTareas("\nBAJA PRIORIDAD", porPrioridad.get(Tarea.Priority.BAJA));
     }
 
         private static void mostrarGrupoTareas(String titulo, List<Tarea> tareas) {
@@ -139,7 +139,7 @@ public class Actividad {
             }
         }
         private static void mostrarHabitos(List<Habito> habitos){
-        System.out.println("\nHabitos por Frecuencia");
+        System.out.println("\n          Habitos por Frecuencia          ");
         System.out.println("--------------------------------------------");
         
         if (habitos.isEmpty()) {
@@ -151,7 +151,7 @@ public class Actividad {
                 .collect(Collectors.groupingBy(Habito::getFrecuencia));
         
         mostrarGrupoHabitos("DIARIOS", porFrecuencia.get(Habito.Frequency.DIARIO));
-        mostrarGrupoHabitos("SEMANALES", porFrecuencia.get(Habito.Frequency.SEMANAL));
+        mostrarGrupoHabitos("\nSEMANALES", porFrecuencia.get(Habito.Frequency.SEMANAL));
         mostrarGrupoHabitos("MENSUALES", porFrecuencia.get(Habito.Frequency.MENSUAL));
         }
         private static void mostrarGrupoHabitos(String titulo, List<Habito> habitos) {
@@ -172,7 +172,7 @@ public class Actividad {
             long tareasPend = contarPendientes(tareas);
             long habitosPend = contarPendientes(habitos);
 
-            System.out.println("\nRECOMENDACIONES");
+            System.out.println("\n            RECOMENDACIONES               ");
             System.out.println("--------------------------------------------");
 
         if (tareasAltasPend > 0) 
