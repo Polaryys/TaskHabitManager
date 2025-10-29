@@ -55,8 +55,11 @@ public class Actividad {
         LocalDate finSemana = hoy.with(DayOfWeek.SATURDAY);
 
         // filtro para actividades de toda la semana
-        List<Tarea> tareasSemana = filtrarPorSemana(tareas, inicioSemana, finSemana);
-        List<Habito> habitosSemana = filtrarPorSemana(habitos, inicioSemana, finSemana);
+        List<Tarea> tareasSemana = tareas;
+        List<Habito> habitosSemana = habitos;
+
+        System.out.printf("Analizando %d tareas y %d habitos (todas las actividades)%n%n", 
+            tareasSemana.size(), habitosSemana.size());
 
         // generar el reporte 
         mostrarEncabezado(inicioSemana, finSemana); 
@@ -204,7 +207,7 @@ public class Actividad {
 
         System.out.printf("Datos cargados: %d tareas, %d habitos%n%n", tareas.size(), habitos.size());
         Actividad.mostrarReporteSemanal(tareas, habitos);
-        
+
         System.out.println("Reporte Generado con exito");
     }
 
