@@ -2,6 +2,7 @@ package main.java.com.proyecto.Gestor;
 
 import main.java.com.proyecto.Modelos.Tarea;
 import main.java.com.proyecto.Modelos.Actividad;
+import main.java.com.proyecto.Modelos.Habito;
 import main.java.com.proyecto.Datos.DataGlobal;
 
 import java.time.LocalDate;
@@ -20,6 +21,10 @@ public class Gestor {
 
     private int generarIdAleatorio() {
         return random.nextInt(1001);
+    }
+
+    private int generarIDHabit(){
+        return 1000 + random.nextInt(9000);
     }
 
     public Tarea createTask(String nombre,
@@ -42,6 +47,73 @@ public class Gestor {
 
         return tarea;
     }
+
+    public Habito createHabit(String nombre,
+
+                              Habito.Frequency frecuencia,
+                              LocalDate fecha,
+                              LocalTime hora) {
+
+        Habito habito = new Habito(
+                generarIDHabit(),
+                nombre,
+                Actividad.State.PENDIENTE,
+                fecha,
+                hora,
+                frecuencia
+        );
+
+        dataGlobal.guardarHabito(habito);
+        return habito;
+    }
+
+     public boolean DeleteActivity(int id) {
+
+    Tarea tarea = dataGlobal.SearchTaskId(id);
+    if (tarea != null) {
+        dataGlobal.DelTarea(id);
+        return true;
+    }
+
+    Habito habito = dataGlobal.SearchHabitId(id);
+    if (habito != null) {
+        dataGlobal.DelHabito(id);
+        return true;
+    }
+
+    return false;
 }
+    public String SearchActivity(int id) {
+    Tarea tarea = dataGlobal.SearchTaskId(id);
+    if (tarea != null) {
+        return "TAREA\n" +
+               "ID: " + tarea.getId() + "\n" +
+               "Nombre: " + tarea.getNombre() + "\n" +
+               "Descripción: " + tarea.getDescripcion() + "\n" +
+               "Prioridad: " + tarea.getPrioridad() + "\n" +
+               "Estado: " + tarea.getEstado() + "\n" +
+               "Fecha: " + tarea.getFecha() + "\n" +
+               "Hora: " + tarea.getHora();
+    }
+
+
+    Habito habito = dataGlobal.SearchHabitId(id);
+    if (habito != null) {
+        return "HÁBITO\n" +
+               "ID: " + habito.getId() + "\n" +
+               "Nombre: " + habito.getNombre() + "\n" +
+               "Frecuencia: " + habito.getFrecuencia() + "\n" +
+               "Estado: " + habito.getEstado() + "\n" +
+               "Fecha: " + habito.getFecha() + "\n" +
+               "Hora: " + habito.getHora();
+    }
+
+    return null;
+    }
+}
+
+
+
+
 
 

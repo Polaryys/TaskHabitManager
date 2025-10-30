@@ -6,35 +6,64 @@ import main.java.com.proyecto.Gestor.Gestor;
 
 import java.awt.*;
 
-public class Main extends JFrame{
+public class Main extends JFrame {
     private Gestor gestor;
-    public Main(){
+
+    public Main() {
         setTitle("Gestor de Actividades");
-        setSize(500, 300);
+        setSize(1440, 980);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         DataGlobal dataGlobal = new DataGlobal();
-        gestor = new Gestor(dataGlobal);;
+        gestor = new Gestor(dataGlobal);
+        JButton NewTask = new JButton("Nueva Tarea");
+        JButton NewHabit = new JButton("Nuevo Hábito");
+        JButton EditActivity = new JButton("Editar Actividad");
+        JButton DeleteActivity = new JButton("Eliminar Actividad");
 
-        JButton NewTask = new JButton("Crear Tarea");
+        JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        fila1.add(NewTask);
+        fila1.add(NewHabit);
 
-        JPanel TopPanel = new JPanel(new BorderLayout());
-        TopPanel.add(NewTask, BorderLayout.EAST);
-        add(TopPanel, BorderLayout.NORTH);
+        JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        fila2.add(EditActivity);
+        fila2.add(DeleteActivity);
 
-        NewTask.addActionListener(e->{
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+
+        topPanel.add(fila1);
+        topPanel.add(fila2);
+
+        add(topPanel, BorderLayout.NORTH);
+
+        NewTask.addActionListener(e -> {
             TaskWindow dialog = new TaskWindow(this, gestor);
             dialog.setVisible(true);
         });
 
+        NewHabit.addActionListener(e -> {
+            HabitWindow dialog = new HabitWindow(this, gestor);
+            dialog.setVisible(true);
+        });
+
+        EditActivity.addActionListener(e -> {
+            EditWindow dialog = new EditWindow(this, gestor);
+            dialog.setVisible(true);
+        });
+
+        DeleteActivity.addActionListener(e -> {
+            DeleteWindow dialog = new DeleteWindow(this, gestor);
+            dialog.setVisible(true);
+        });
     }
 
-    public static void main(String[] args){
-        SwingUtilities.invokeLater(() ->{
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
             new Main().setVisible(true);
         });
     }
-    
 }

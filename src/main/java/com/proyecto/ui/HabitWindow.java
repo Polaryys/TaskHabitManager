@@ -1,21 +1,24 @@
+
+
 package main.java.com.proyecto.ui;
+
+import main.java.com.proyecto.Gestor.Gestor;
+import main.java.com.proyecto.Modelos.Habito;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import main.java.com.proyecto.Modelos.*;
-import main.java.com.proyecto.Gestor.*;
 
-
-public class TaskWindow extends JDialog {
+public class HabitWindow extends JDialog {
     private Gestor gestor;
 
-    public TaskWindow(JFrame parent, Gestor gestor2) {
-        super(parent, "Nueva Tarea", true);
+    public HabitWindow(JFrame parent, Gestor gestor2) {
+        super(parent, "Nuevo Hábito", true);
         this.gestor = gestor2;
 
-        setSize(400, 300);
+        setSize(450, 300);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -32,43 +35,35 @@ public class TaskWindow extends JDialog {
         mainPanel.add(row1);
 
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel lblDesc = new JLabel("Descripción:");
-        JTextField txtDesc = new JTextField();
-        txtDesc.setPreferredSize(new Dimension(200, 25));
-        row2.add(lblDesc);
-        row2.add(txtDesc);
+        JLabel lblFreq = new JLabel("Frecuencia (DIARIO, SEMANAL, MENSUAL):");
+        JTextField txtFreq = new JTextField();
+        txtFreq.setPreferredSize(new Dimension(150, 25));
+        row2.add(lblFreq);
+        row2.add(txtFreq);
         mainPanel.add(row2);
 
         JPanel row3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel lblPriority = new JLabel("Prioridad (BAJA, MEDIA, ALTA):");
-        JTextField txtPriority = new JTextField();
-        txtPriority.setPreferredSize(new Dimension(100, 25));
-        row3.add(lblPriority);
-        row3.add(txtPriority);
-        mainPanel.add(row3);
-
-        JPanel row4 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         JLabel lblDate = new JLabel("Fecha (AAAA-MM-DD):");
         JTextField txtDate = new JTextField();
         txtDate.setPreferredSize(new Dimension(100, 25));
-        row4.add(lblDate);
-        row4.add(txtDate);
-        mainPanel.add(row4);
+        row3.add(lblDate);
+        row3.add(txtDate);
+        mainPanel.add(row3);
 
-        JPanel row5 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        JPanel row4 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         JLabel lblHour = new JLabel("Hora (HH:mm):");
         JTextField txtHour = new JTextField();
         txtHour.setPreferredSize(new Dimension(80, 25));
-        row5.add(lblHour);
-        row5.add(txtHour);
-        mainPanel.add(row5);
+        row4.add(lblHour);
+        row4.add(txtHour);
+        mainPanel.add(row4);
 
-        JPanel row6 = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel row5 = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton btnGuardar = new JButton("Guardar");
         JButton btnCancelar = new JButton("Cancelar");
-        row6.add(btnGuardar);
-        row6.add(btnCancelar);
-        mainPanel.add(row6);
+        row5.add(btnGuardar);
+        row5.add(btnCancelar);
+        mainPanel.add(row5);
 
         add(mainPanel, BorderLayout.CENTER);
 
@@ -76,14 +71,11 @@ public class TaskWindow extends JDialog {
             try {
 
                 String nombre = txtName.getText().trim();
-                String descripcion = txtDesc.getText().trim();
-                String prioridadStr = txtPriority.getText().trim();
+                String freqStr = txtFreq.getText().trim().toUpperCase();
                 String fechaStr = txtDate.getText().trim();
                 String horaStr = txtHour.getText().trim();
 
-
-                if(nombre.isEmpty() || descripcion.isEmpty() || prioridadStr.isEmpty() 
-                    || fechaStr.isEmpty() || horaStr.isEmpty()) {
+                if(nombre.isEmpty() || freqStr.isEmpty() || fechaStr.isEmpty() || horaStr.isEmpty()) {
                     JOptionPane.showMessageDialog(this,
                             "Todos los campos son obligatorios.",
                             "Error",
@@ -91,18 +83,29 @@ public class TaskWindow extends JDialog {
                     return;
                 }
 
-                Tarea.Priority prioridad = Tarea.Priority.valueOf(prioridadStr.toUpperCase());
+                Habito.Frequency frecuencia;
+                try {
+                    frecuencia = Habito.Frequency.valueOf(freqStr);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(this,
+                            "Frecuencia inválida. Debe ser DIARIO, SEMANAL o MENSUAL.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 LocalDate fecha = LocalDate.parse(fechaStr);
                 LocalTime hora = LocalTime.parse(horaStr);
 
-                Tarea nuevaTarea = gestor.createTask(nombre, descripcion, prioridad, fecha, hora);
+                Habito nuevoHabito = gestor.createHabit(nombre, frecuencia, fecha, hora);
 
                 JOptionPane.showMessageDialog(this,
-                        "Tarea creada exitosamente.\nID: " + nuevaTarea.getId());
+                        "Hábito creado exitosamente.\nID: " + nuevoHabito.getId());
                 dispose();
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(),
-                                      "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
