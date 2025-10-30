@@ -12,6 +12,7 @@ public class Actividad {
     private int id;
     private String nombre;
     private State estado;
+    
     private LocalDate fecha;
     private LocalTime hora;
 
