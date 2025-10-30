@@ -22,4 +22,26 @@ public class DataGlobal {
             System.err.println("Error al guardar la tarea: " + e.getMessage());
         }
     }
+    public void guardarHabito(Habito habito) {
+    String HABITS_PATH = "Habitos.csv"; 
+
+    try {
+        FileWriter writer = new FileWriter(HABITS_PATH, true);
+
+        writer.write(String.format("%d,%s,%s,%s,%s,%s%n",
+                habito.getId(),       
+                habito.getNombre(),   
+                habito.getFrecuencia(),
+                habito.getEstado(),   
+                habito.getHora(),     
+                habito.getFecha()      
+        ));
+
+        writer.close();
+
+    } catch (IOException e) {
+        System.err.println("Error al guardar el hábito: " + e.getMessage());
+    }
+}
+
 }

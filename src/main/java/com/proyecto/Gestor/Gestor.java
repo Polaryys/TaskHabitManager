@@ -2,6 +2,7 @@ package main.java.com.proyecto.Gestor;
 
 import main.java.com.proyecto.Modelos.Tarea;
 import main.java.com.proyecto.Modelos.Actividad;
+import main.java.com.proyecto.Modelos.Habito;
 import main.java.com.proyecto.Datos.DataGlobal;
 
 import java.time.LocalDate;
@@ -20,6 +21,10 @@ public class Gestor {
 
     private int generarIdAleatorio() {
         return random.nextInt(1001);
+    }
+
+    private int generarIDHabit(){
+        return 1000 + random.nextInt(9000);
     }
 
     public Tarea createTask(String nombre,
@@ -42,6 +47,25 @@ public class Gestor {
 
         return tarea;
     }
+
+    public Habito createHabit(String nombre,
+                              Habito.Frequency frecuencia,
+                              LocalDate fecha,
+                              LocalTime hora) {
+
+        Habito habito = new Habito(
+                generarIDHabit(),
+                nombre,
+                Actividad.State.PENDIENTE,
+                fecha,
+                hora,
+                frecuencia
+        );
+
+        dataGlobal.guardarHabito(habito);
+        return habito;
+    }
 }
+
 
 

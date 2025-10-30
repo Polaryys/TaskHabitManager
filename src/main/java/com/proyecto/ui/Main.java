@@ -19,24 +19,19 @@ public class Main extends JFrame {
 
         DataGlobal dataGlobal = new DataGlobal();
         gestor = new Gestor(dataGlobal);
-
-        // ✅ Botones
         JButton NewTask = new JButton("Nueva Tarea");
         JButton NewHabit = new JButton("Nuevo Hábito");
         JButton EditActivity = new JButton("Editar Actividad");
         JButton DeleteActivity = new JButton("Eliminar Actividad");
 
-        // ✅ Fila 1 (arriba) alineada a la derecha
         JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila1.add(NewTask);
         fila1.add(NewHabit);
 
-        // ✅ Fila 2 (abajo) alineada a la derecha
         JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila2.add(EditActivity);
         fila2.add(DeleteActivity);
 
-        // ✅ Panel principal que apila las dos filas
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 
@@ -45,7 +40,6 @@ public class Main extends JFrame {
 
         add(topPanel, BorderLayout.NORTH);
 
-        // ✅ Eventos
         NewTask.addActionListener(e -> {
             TaskWindow dialog = new TaskWindow(this, gestor);
             dialog.setVisible(true);
