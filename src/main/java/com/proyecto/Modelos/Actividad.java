@@ -60,6 +60,7 @@ public class Actividad {
         List<Habito> habitosSemana = habitos;
 
         System.out.printf("Analizando %d tareas y %d habitos (todas las actividades)%n%n", 
+
             tareasSemana.size(), habitosSemana.size());
 
         // generar el reporte 
@@ -233,17 +234,24 @@ public class Actividad {
 
      private static Tarea crearTarea(String [] datos) {
         return new Tarea(
-            Integer.parseInt(datos[0]), datos[1], State.valueOf(datos[2]),
-            LocalDate.parse(datos[3]), LocalTime.parse(datos[4]), 
-            datos[5], Tarea.Priority.valueOf(datos[6])
+            Integer.parseInt(datos[0]),
+            datos[1], 
+            State.valueOf(datos[4]),
+            LocalDate.parse(datos[6]),
+            LocalTime.parse(datos[5]), 
+            datos[2],
+            Tarea.Priority.valueOf(datos[3])
         );
         
     }
         private static Habito crearHabito(String[] datos) {
         return new Habito(
-            Integer.parseInt(datos[0]), datos[1], State.valueOf(datos[2]),
-            LocalDate.parse(datos[3]), LocalTime.parse(datos[4]), 
-            Habito.Frequency.valueOf(datos[5])
+            Integer.parseInt(datos[0]), 
+            datos[1], 
+            State.valueOf(datos[4]),
+            LocalDate.parse(datos[5]), 
+            LocalTime.parse(datos[3]), 
+            Habito.Frequency.valueOf(datos[2])
         );
     }
 }
