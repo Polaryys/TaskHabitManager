@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Actividad {
 
     public enum State{
@@ -55,10 +56,10 @@ public class Actividad {
         LocalDate finSemana = hoy.with(DayOfWeek.SATURDAY);
 
         // filtro para actividades de toda la semana
-        List<Tarea> tareasSemana = tareas;
-        List<Habito> habitosSemana = habitos;
+       List<Tarea> tareasSemana = filtrarPorSemana(tareas, inicioSemana, finSemana);
+       List<Habito> habitosSemana = filtrarPorSemana(habitos, inicioSemana, finSemana);
 
-        System.out.printf("Analizando %d tareas y %d habitos (todas las actividades)%n%n", 
+        System.out.printf("Analizando %d tareas y %d habitos (todas las fechas)%n%n", 
 
             tareasSemana.size(), habitosSemana.size());
 
@@ -70,8 +71,10 @@ public class Actividad {
 
         //filtro
         private static <T extends Actividad> List<T> filtrarPorSemana(List<T> actividades, LocalDate inicio, LocalDate fin) {
+            if (actividades == null) return new ArrayList<>();
+
             return actividades.stream()
-                    .filter(a -> !a.getFecha().isBefore(inicio) && !a.getFecha().isAfter(fin))
+                    .filter(a -> a != null && a.getFecha() != null)
                     .collect(Collectors.toList());
         }
 
@@ -221,10 +224,8 @@ public class Actividad {
             System.out.println("Cargando archivo: " + ruta);
             
             java.nio.file.Files.lines(java.nio.file.Paths.get(ruta))
-                .skip(1)
-                    .map(linea -> linea.split(","))
-                    .filter(datos -> datos.length >= (archivo.equals("Tareas.csv") ? 7 : 6))
-
+                .map(linea -> linea.split(","))
+                .filter(datos -> datos.length > 0 && datos[0].trim().matches("\\d+") && datos.length >= (archivo.equals("Tareas.csv") ? 7 : 6))
                     .forEach(datos -> items.add(creador.apply(datos)));
         } catch (Exception e) {
             System.out.println("Error cargando " + archivo + ": " + e.getMessage());
@@ -235,24 +236,24 @@ public class Actividad {
 
      private static Tarea crearTarea(String [] datos) {
         return new Tarea(
-            Integer.parseInt(datos[0]),
-            datos[1], 
-            State.valueOf(datos[4]),
-            LocalDate.parse(datos[6]),
-            LocalTime.parse(datos[5]), 
-            datos[2],
-            Tarea.Priority.valueOf(datos[3])
+            Integer.parseInt(datos[0].trim()),
+            datos[1].trim(), 
+            State.valueOf(datos[4].trim()),
+            LocalDate.parse(datos[6].trim()),
+            LocalTime.parse(datos[5].trim()), 
+            datos[2].trim(),
+            Tarea.Priority.valueOf(datos[3].trim())
         );
         
     }
         private static Habito crearHabito(String[] datos) {
         return new Habito(
-            Integer.parseInt(datos[0]), 
-            datos[1], 
-            State.valueOf(datos[3]),
-            LocalDate.parse(datos[5]), 
-            LocalTime.parse(datos[4]), 
-            Habito.Frequency.valueOf(datos[2])
+            Integer.parseInt(datos[0].trim()), 
+            datos[1].trim(), 
+            State.valueOf(datos[3].trim()),
+            LocalDate.parse(datos[5].trim()), 
+            LocalTime.parse(datos[4].trim()), 
+            Habito.Frequency.valueOf(datos[2].trim())
         );
     }
 }
