@@ -63,7 +63,6 @@ public class Actividad {
 
             tareasSemana.size(), habitosSemana.size());
 
-        // generar el reporte 
         mostrarEncabezado(inicioSemana, finSemana); 
         mostrarResumen(tareasSemana, habitosSemana);
         mostrarDetalles(tareasSemana, habitosSemana); 
@@ -82,12 +81,14 @@ public class Actividad {
         private static  void mostrarEncabezado(LocalDate inicio, LocalDate fin) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             System.out.println("------------------------------------------------");
-            System.out.println("                reporte semanal         ");
+            System.out.println("                REPORTE SEMANAL         ");
             System.out.println("------------------------------------------------");
             System.out.printf("Periodo: %s al %s%n", inicio.format(fmt), fin.format(fmt));
             System.out.printf("Generando: %s %s%n", 
+
                 LocalDate.now().format(fmt), 
                 LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))); 
+                
             System.out.println();
         }
 
@@ -98,10 +99,13 @@ public class Actividad {
 
             System.out.println("                    RESUMEN                  ");
             System.out.println("------------------------------------------------");
+
             System.out.printf("- Tareas: %d/%d completadas (%.0f%%)%n",
                 tareasComp, tareas.size(), calcularPorcentaje (tareasComp, tareas.size()));
+
             System.out.printf("- Habitos: %d/%d completados (%.0f%%)%n", 
                 habitosComp, habitos.size(), calcularPorcentaje(habitosComp, habitos.size()));
+
             System.out.printf("- Productividad general: %.0f%%%n", 
                 calcularPorcentaje(tareasComp + habitosComp, tareas.size() + habitos.size()));
             System.out.println();
@@ -115,7 +119,7 @@ public class Actividad {
 
         // tareas formales: 
         private static void mostrarTareas(List<Tarea> tareas) {
-        System.out.println("       TAREAS (Agrupadas por Prioridad     )");
+        System.out.println("       TAREAS (Agrupadas por Prioridad)");
         System.out.println("--------------------------------------------");
 
         if (tareas.isEmpty()) {
@@ -134,12 +138,12 @@ public class Actividad {
         private static void mostrarGrupoTareas(String titulo, List<Tarea> tareas) {
             if (tareas != null && !tareas.isEmpty()) {
             System.out.println(titulo + ":");
+
             for (Tarea tarea : tareas) {
                 String estado = (tarea.getEstado() == State.COMPLETADO) ? "[COMPLETADA]" : "[PENDIENTE]";
                 System.out.printf("   %s %s - %s%n", 
                     estado, tarea.getNombre(), tarea.getDescripcion());
                 }
-
             }
         }
         private static void mostrarHabitos(List<Habito> habitos){
@@ -168,7 +172,6 @@ public class Actividad {
         }
     }
 
-        // recomendaciones 
         private static void mostrarRecomendaciones(List<Tarea> tareas, List<Habito> habitos) {
             long tareasAltasPend = tareas.stream()
                 .filter(t -> t.getPrioridad() == Tarea.Priority.ALTA && t.getEstado() == State.PENDIENTE)
@@ -181,10 +184,13 @@ public class Actividad {
 
         if (tareasAltasPend > 0) 
             System.out.println(" Prioriza " + tareasAltasPend + " tareas de ALTA prioridad pendientes");
+
         if (tareasPend > 3) 
             System.out.println(" Considerar dividir " + tareasPend + " tareas pendientes en pasos mas pequenos");
+
         if (habitosPend > 0) 
             System.out.println(" Enfocarse en completar " + habitosPend + " habitos pendientes");
+
         if (tareasAltasPend == 0 && tareasPend == 0 && habitosPend == 0) 
             System.out.println(" Excelente trabajo Manten este ritmo de productividad");
 
@@ -227,13 +233,12 @@ public class Actividad {
                 .map(linea -> linea.split(","))
                 .filter(datos -> datos.length > 0 && datos[0].trim().matches("\\d+") && datos.length >= (archivo.equals("Tareas.csv") ? 7 : 6))
                     .forEach(datos -> items.add(creador.apply(datos)));
+
         } catch (Exception e) {
             System.out.println("Error cargando " + archivo + ": " + e.getMessage());
         }
         return items;
     }
-
-
      private static Tarea crearTarea(String [] datos) {
         return new Tarea(
             Integer.parseInt(datos[0].trim()),
