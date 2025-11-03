@@ -1,6 +1,8 @@
 package main.java.com.proyecto.ui;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,14 +16,18 @@ public class TaskWindow extends JDialog {
     public TaskWindow(JFrame parent, Gestor gestor2) {
         super(parent, "Nueva Tarea", true);
         this.gestor = gestor2;
-
+        setUndecorated(true);
         setSize(400, 300);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(205, 205, 205));
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(Color.GRAY, 2),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
 
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         JLabel lblName = new JLabel("Nombre:");
