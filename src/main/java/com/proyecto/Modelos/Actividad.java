@@ -16,7 +16,6 @@ public class Actividad {
     private int id;
     private String nombre;
     private State estado;
-    
     private LocalDate fecha;
     private LocalTime hora;
 
@@ -219,6 +218,8 @@ public class Actividad {
         List<T> items = new ArrayList<>();
         try {
             String ruta = "src/main/java/com/proyecto/Datos/" + archivo;
+            System.out.println("Cargando archivo: " + ruta);
+            
             java.nio.file.Files.lines(java.nio.file.Paths.get(ruta))
                 .skip(1)
                     .map(linea -> linea.split(","))
@@ -248,9 +249,9 @@ public class Actividad {
         return new Habito(
             Integer.parseInt(datos[0]), 
             datos[1], 
-            State.valueOf(datos[4]),
+            State.valueOf(datos[3]),
             LocalDate.parse(datos[5]), 
-            LocalTime.parse(datos[3]), 
+            LocalTime.parse(datos[4]), 
             Habito.Frequency.valueOf(datos[2])
         );
     }
