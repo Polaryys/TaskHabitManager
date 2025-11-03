@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DeleteWindow extends JDialog {
-
+    @SuppressWarnings("unused")
     private Gestor gestor;
 
     public DeleteWindow(JFrame parent, Gestor gestor) {
@@ -35,7 +35,7 @@ public class DeleteWindow extends JDialog {
         JScrollPane scrollPane = new JScrollPane(infoArea);
 
         JButton btnEliminar = new JButton("Eliminar");
-        btnEliminar.setEnabled(false); 
+        btnEliminar.setEnabled(false);
 
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -45,7 +45,7 @@ public class DeleteWindow extends JDialog {
             try {
                 int id = Integer.parseInt(txtId.getText().trim());
 
-                String actividad = gestor.SearchActivity(id); 
+                String actividad = gestor.SearchActivity(id);
 
                 if (actividad == null) {
                     infoArea.setText("No se encontró ninguna actividad con ese ID.");
@@ -63,14 +63,12 @@ public class DeleteWindow extends JDialog {
             }
         });
 
-        // ---------- Acción al eliminar ----------
         btnEliminar.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(
                     this,
                     "¿Seguro que deseas eliminar esta actividad?",
                     "Confirmar",
-                    JOptionPane.YES_NO_OPTION
-            );
+                    JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
                 int id = Integer.parseInt(txtId.getText().trim());

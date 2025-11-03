@@ -23,15 +23,15 @@ public class Gestor {
         return random.nextInt(1001);
     }
 
-    private int generarIDHabit(){
+    private int generarIDHabit() {
         return 1000 + random.nextInt(9000);
     }
 
     public Tarea createTask(String nombre,
-                                    String descripcion,
-                                    Tarea.Priority prioridad,
-                                    LocalDate fecha,
-                                    LocalTime hora) {
+            String descripcion,
+            Tarea.Priority prioridad,
+            LocalDate fecha,
+            LocalTime hora) {
 
         Tarea tarea = new Tarea(
                 generarIdAleatorio(),
@@ -40,8 +40,7 @@ public class Gestor {
                 fecha,
                 hora,
                 descripcion,
-                prioridad
-        );
+                prioridad);
 
         dataGlobal.guardarTarea(tarea);
 
@@ -50,9 +49,9 @@ public class Gestor {
 
     public Habito createHabit(String nombre,
 
-                              Habito.Frequency frecuencia,
-                              LocalDate fecha,
-                              LocalTime hora) {
+            Habito.Frequency frecuencia,
+            LocalDate fecha,
+            LocalTime hora) {
 
         Habito habito = new Habito(
                 generarIDHabit(),
@@ -60,60 +59,69 @@ public class Gestor {
                 Actividad.State.PENDIENTE,
                 fecha,
                 hora,
-                frecuencia
-        );
+                frecuencia);
 
         dataGlobal.guardarHabito(habito);
         return habito;
     }
 
-     public boolean DeleteActivity(int id) {
+    public boolean DeleteActivity(int id) {
 
-    Tarea tarea = dataGlobal.SearchTaskId(id);
-    if (tarea != null) {
-        dataGlobal.DelTarea(id);
-        return true;
+        Tarea tarea = dataGlobal.SearchTaskId(id);
+        if (tarea != null) {
+            dataGlobal.DelTarea(id);
+            return true;
+        }
+
+        Habito habito = dataGlobal.SearchHabitId(id);
+        if (habito != null) {
+            dataGlobal.DelHabito(id);
+            return true;
+        }
+
+        return false;
     }
 
-    Habito habito = dataGlobal.SearchHabitId(id);
-    if (habito != null) {
-        dataGlobal.DelHabito(id);
-        return true;
-    }
-
-    return false;
-}
     public String SearchActivity(int id) {
-    Tarea tarea = dataGlobal.SearchTaskId(id);
-    if (tarea != null) {
-        return "TAREA\n" +
-               "ID: " + tarea.getId() + "\n" +
-               "Nombre: " + tarea.getNombre() + "\n" +
-               "Descripción: " + tarea.getDescripcion() + "\n" +
-               "Prioridad: " + tarea.getPrioridad() + "\n" +
-               "Estado: " + tarea.getEstado() + "\n" +
-               "Fecha: " + tarea.getFecha() + "\n" +
-               "Hora: " + tarea.getHora();
+        Tarea tarea = dataGlobal.SearchTaskId(id);
+        if (tarea != null) {
+            return "TAREA\n" +
+                    "ID: " + tarea.getId() + "\n" +
+                    "Nombre: " + tarea.getNombre() + "\n" +
+                    "Descripción: " + tarea.getDescripcion() + "\n" +
+                    "Prioridad: " + tarea.getPrioridad() + "\n" +
+                    "Estado: " + tarea.getEstado() + "\n" +
+                    "Fecha: " + tarea.getFecha() + "\n" +
+                    "Hora: " + tarea.getHora();
+        }
+
+        Habito habito = dataGlobal.SearchHabitId(id);
+        if (habito != null) {
+            return "HÁBITO\n" +
+                    "ID: " + habito.getId() + "\n" +
+                    "Nombre: " + habito.getNombre() + "\n" +
+                    "Frecuencia: " + habito.getFrecuencia() + "\n" +
+                    "Estado: " + habito.getEstado() + "\n" +
+                    "Fecha: " + habito.getFecha() + "\n" +
+                    "Hora: " + habito.getHora();
+        }
+
+        return null;
     }
 
-
-    Habito habito = dataGlobal.SearchHabitId(id);
-    if (habito != null) {
-        return "HÁBITO\n" +
-               "ID: " + habito.getId() + "\n" +
-               "Nombre: " + habito.getNombre() + "\n" +
-               "Frecuencia: " + habito.getFrecuencia() + "\n" +
-               "Estado: " + habito.getEstado() + "\n" +
-               "Fecha: " + habito.getFecha() + "\n" +
-               "Hora: " + habito.getHora();
+    public Tarea SearchTaskId(int id) {
+        return dataGlobal.SearchTaskId(id);
     }
 
-    return null;
+    public Habito SearchHabitId(int id) {
+        return dataGlobal.SearchHabitId(id);
+    }
+
+    public boolean updateTask(Tarea tareaActualizada) {
+        return DataGlobal.updateTarea(tareaActualizada);
+    }
+
+    public void updateHabito(Habito h) {
+        dataGlobal.updateHabito(h);
     }
 }
-
-
-
-
-
-
