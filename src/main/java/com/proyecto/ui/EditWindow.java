@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EditWindow extends JDialog {
-
+    @SuppressWarnings("unused")
     private Gestor gestor;
 
     public EditWindow(JFrame parent, Gestor gestor) {
@@ -46,7 +46,7 @@ public class EditWindow extends JDialog {
     }
 
     class TaskEdit extends JDialog {
-
+        @SuppressWarnings("unused")
         private Gestor gestor;
 
         public TaskEdit(JFrame parent, Gestor gestor) {
@@ -254,7 +254,7 @@ public class EditWindow extends JDialog {
     }
 
     class HabitEdit extends JDialog {
-
+        @SuppressWarnings("unused")
         private Gestor gestor;
 
         public HabitEdit(JFrame parent, Gestor gestor) {

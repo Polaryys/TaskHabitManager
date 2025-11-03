@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DeleteWindow extends JDialog {
-
+    @SuppressWarnings("unused")
     private Gestor gestor;
 
     public DeleteWindow(JFrame parent, Gestor gestor) {
