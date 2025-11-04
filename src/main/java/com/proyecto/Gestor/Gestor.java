@@ -8,6 +8,9 @@ import main.java.com.proyecto.Datos.DataGlobal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Random;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Gestor {
 
@@ -123,5 +126,27 @@ public class Gestor {
 
     public void updateHabito(Habito h) {
         dataGlobal.updateHabito(h);
+    }
+
+    // Return tasks ordered by priority (ALTA, MEDIA, BAJA), then date, then time
+    public List<Tarea> obtenerTareasOrdenadas() {
+        List<Tarea> tareas = dataGlobal.obtenerTareasList();
+        Collections.sort(tareas, new Comparator<Tarea>() {
+            @Override
+            public int compare(Tarea t1, Tarea t2) {
+                // Priority: ALTA > MEDIA > BAJA. The enum ordering is BAJA, MEDIA, ALTA so compare reverse
+                int p1 = t1.getPrioridad().ordinal();
+                int p2 = t2.getPrioridad().ordinal();
+                if (p1 != p2) {
+                    return Integer.compare(p2, p1); // higher ordinal = higher priority (ALTA)
+                }
+                // Same priority: compare date
+                int fechaComp = t1.getFecha().compareTo(t2.getFecha());
+                if (fechaComp != 0) return fechaComp;
+                // Same date: compare time
+                return t1.getHora().compareTo(t2.getHora());
+            }
+        });
+        return tareas;
     }
 }
