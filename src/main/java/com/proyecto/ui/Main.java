@@ -41,11 +41,11 @@ public class Main extends JFrame {
         JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila1.add(NewTask);
         fila1.add(NewHabit);
+        fila1.add(Report);
 
         JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila2.add(EditActivity);
         fila2.add(DeleteActivity);
-        fila2.add(Report);
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));

@@ -68,16 +68,15 @@ public class Actividad {
         mostrarDetalles(tareasSemana, habitosSemana); 
     }
 
-        //filtro
         private static <T extends Actividad> List<T> filtrarPorSemana(List<T> actividades, LocalDate inicio, LocalDate fin) {
             if (actividades == null) return new ArrayList<>();
 
             return actividades.stream()
                     .filter(a -> a != null && a.getFecha() != null)
+                    .filter(a -> !a.getFecha().isBefore(inicio) && !a.getFecha().isAfter(fin))
                     .collect(Collectors.toList());
         }
 
-        // encabezado 
         private static  void mostrarEncabezado(LocalDate inicio, LocalDate fin) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             System.out.println("------------------------------------------------");
@@ -92,7 +91,7 @@ public class Actividad {
             System.out.println();
         }
 
-        // resumen formal 
+
         private static void mostrarResumen(List<Tarea> tareas, List<Habito> habitos) {
             long tareasComp = contarCompletados(tareas); 
             long habitosComp = contarCompletados(habitos); 
@@ -117,7 +116,7 @@ public class Actividad {
             mostrarRecomendaciones(tareas, habitos);
         }
 
-        // tareas formales: 
+    
         private static void mostrarTareas(List<Tarea> tareas) {
         System.out.println("       TAREAS (Agrupadas por Prioridad)");
         System.out.println("--------------------------------------------");
@@ -220,8 +219,6 @@ public class Actividad {
 
         System.out.println("Reporte Generado con exito");
     }
-
-    // para traer los datos de los archivos csv.
 
     private static <T> List<T> cargarDesdeCSV(String archivo, java.util.function.Function<String[], T> creador) {
         List<T> items = new ArrayList<>();
