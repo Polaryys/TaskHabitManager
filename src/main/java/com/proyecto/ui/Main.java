@@ -38,10 +38,16 @@ public class Main extends JFrame {
         JButton DeleteActivity = new JButton("Eliminar Actividad");
         styleButton(DeleteActivity, buttonFont, new Color(159, 37, 6), textColor);
 
+        JButton Report = new JButton("Reporte semanal");
+        styleButton(Report, buttonFont, new Color(128, 0, 128), textColor);
+
         JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    fila1.add(NewTask);
-    fila1.add(NewHabit);
-    fila1.add(ShowTasks);
+
+        fila1.add(NewTask);
+        fila1.add(NewHabit);
+        fila1.add(Report);
+        fila1.add(ShowTasks);
+
 
         JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila2.add(EditActivity);
@@ -73,6 +79,13 @@ public class Main extends JFrame {
             DeleteWindow dialog = new DeleteWindow(this, gestor);
             dialog.setVisible(true);
         });
+
+
+        Report.addActionListener(e -> {
+            ReportWindow dialog = new ReportWindow(this, gestor);
+            dialog.setVisible(true);
+        }
+        );
 
         ShowTasks.addActionListener(e -> {
             // Fetch ordered tasks and show in a dialog
@@ -108,6 +121,7 @@ public class Main extends JFrame {
             dlg.setLocationRelativeTo(this);
             dlg.setVisible(true);
         });
+
     }
 
     private void styleButton(JButton button, Font font, Color bg, Color fg) {
