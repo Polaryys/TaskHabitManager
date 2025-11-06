@@ -1,6 +1,8 @@
 package main.java.com.proyecto.Datos;
 
 import main.java.com.proyecto.Modelos.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -208,6 +210,36 @@ public class DataGlobal {
         tempFile.renameTo(originalFile);
 
         return actualizado;
+    }
+
+    // Return all tasks from the CSV as a list
+    public List<Tarea> obtenerTareasList() {
+        List<Tarea> tareas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_TAREAS))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] parts = line.split(",");
+                try {
+                    int id = Integer.parseInt(parts[0]);
+                    String nombre = parts.length > 1 ? parts[1] : "";
+                    String descripcion = parts.length > 2 ? parts[2] : "";
+                    Tarea.Priority prioridad = parts.length > 3 ? Tarea.Priority.valueOf(parts[3]) : Tarea.Priority.MEDIA;
+                    Actividad.State estado = parts.length > 4 ? Actividad.State.valueOf(parts[4]) : Actividad.State.PENDIENTE;
+                    java.time.LocalTime hora = parts.length > 5 ? java.time.LocalTime.parse(parts[5]) : java.time.LocalTime.of(0,0);
+                    java.time.LocalDate fecha = parts.length > 6 ? java.time.LocalDate.parse(parts[6]) : java.time.LocalDate.now();
+
+                    Tarea t = new Tarea(id, nombre, estado, fecha, hora, descripcion, prioridad);
+                    tareas.add(t);
+                } catch (Exception ex) {
+                    // Skip malformed lines but keep going
+                    System.err.println("Warning: skipping malformed tarea line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tareas;
     }
 
 }
