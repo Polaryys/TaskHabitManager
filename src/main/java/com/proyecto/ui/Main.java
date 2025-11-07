@@ -41,13 +41,15 @@ public class Main extends JFrame {
         JButton Report = new JButton("Reporte semanal");
         styleButton(Report, buttonFont, new Color(128, 0, 128), textColor);
 
+        JButton complet = new JButton("Completar Tareas y Hábitos");
+        styleButton(complet, buttonFont, new Color(230, 126, 34), textColor);
         JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         fila1.add(NewTask);
         fila1.add(NewHabit);
         fila1.add(Report);
         fila1.add(ShowTasks);
-
+        fila1.add(complet);
 
         JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila2.add(EditActivity);
@@ -83,6 +85,12 @@ public class Main extends JFrame {
 
         Report.addActionListener(e -> {
             ReportWindow dialog = new ReportWindow(this, gestor);
+            dialog.setVisible(true);
+        }
+        );
+
+        complet.addActionListener(e -> {
+            CompleteWindow dialog = new CompleteWindow(this, gestor);
             dialog.setVisible(true);
         }
         );
