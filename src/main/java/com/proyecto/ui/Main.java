@@ -16,7 +16,8 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/TasksIcon.png");
+        setIconImage(icon);
         DataGlobal dataGlobal = new DataGlobal();
         gestor = new Gestor(dataGlobal);
 
