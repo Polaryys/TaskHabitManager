@@ -4,7 +4,6 @@ import main.java.com.proyecto.Gestor.Gestor;
 import main.java.com.proyecto.Modelos.Habito;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -11,7 +11,7 @@ public class Main extends JFrame {
 
     public Main() {
         setTitle("Gestor de Actividades");
-        setSize(1440, 980);
+        setSize(1360, 780);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
