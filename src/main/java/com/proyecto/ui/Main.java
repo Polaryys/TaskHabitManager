@@ -88,36 +88,77 @@ public class Main extends JFrame {
         );
 
         ShowTasks.addActionListener(e -> {
-            // Fetch ordered tasks and show in a dialog
+            // Fetch ordered tasks
             java.util.List<main.java.com.proyecto.Modelos.Tarea> tareas = gestor.obtenerTareasOrdenadas();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("=== TAREAS ORDENADAS POR PRIORIDAD ===\n\n");
+            // Separate by priority
+            java.util.List<main.java.com.proyecto.Modelos.Tarea> alta = new java.util.ArrayList<>();
+            java.util.List<main.java.com.proyecto.Modelos.Tarea> media = new java.util.ArrayList<>();
+            java.util.List<main.java.com.proyecto.Modelos.Tarea> baja = new java.util.ArrayList<>();
 
-            if (tareas.isEmpty()) {
-                sb.append("No hay tareas guardadas.\n");
-            } else {
-                // They are already ordered; we'll still group them by priority for clarity
-                main.java.com.proyecto.Modelos.Tarea.Priority current = null;
-                for (main.java.com.proyecto.Modelos.Tarea t : tareas) {
-                    if (current != t.getPrioridad()) {
-                        current = t.getPrioridad();
-                        sb.append("--- PRIORIDAD ").append(current).append(" ---\n");
-                    }
-                    sb.append(String.format("ID: %d | %s | %s | %s %s | Estado: %s\n",
-                            t.getId(), t.getNombre(), t.getDescripcion(), t.getFecha().toString(), t.getHora().toString(), t.getEstado()));
+            for (main.java.com.proyecto.Modelos.Tarea t : tareas) {
+                switch (t.getPrioridad()) {
+                    case ALTA:
+                        alta.add(t);
+                        break;
+                    case MEDIA:
+                        media.add(t);
+                        break;
+                    case BAJA:
+                    default:
+                        baja.add(t);
+                        break;
                 }
             }
 
-            // Show in a dialog with scroll
-            JDialog dlg = new JDialog(this, "Tareas", true);
-            JTextArea txt = new JTextArea(sb.toString());
-            txt.setEditable(false);
-            txt.setFont(new Font("Monospaced", Font.PLAIN, 12));
-            JScrollPane sp = new JScrollPane(txt);
-            sp.setPreferredSize(new java.awt.Dimension(800, 500));
-            dlg.getContentPane().add(sp);
-            dlg.pack();
+            String[] columns = {"ID", "Nombre", "Descripción", "Fecha", "Hora", "Estado"};
+
+            javax.swing.table.DefaultTableModel modelAlta = new javax.swing.table.DefaultTableModel(columns, 0) {
+                @Override public boolean isCellEditable(int row, int column) { return false; }
+            };
+            javax.swing.table.DefaultTableModel modelMedia = new javax.swing.table.DefaultTableModel(columns, 0) {
+                @Override public boolean isCellEditable(int row, int column) { return false; }
+            };
+            javax.swing.table.DefaultTableModel modelBaja = new javax.swing.table.DefaultTableModel(columns, 0) {
+                @Override public boolean isCellEditable(int row, int column) { return false; }
+            };
+
+            java.time.format.DateTimeFormatter df = java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+            java.time.format.DateTimeFormatter tf = java.time.format.DateTimeFormatter.ofPattern("HH:mm");
+
+            for (main.java.com.proyecto.Modelos.Tarea t : alta) {
+                modelAlta.addRow(new Object[]{t.getId(), t.getNombre(), t.getDescripcion(), t.getFecha().format(df), t.getHora().format(tf), t.getEstado()});
+            }
+            for (main.java.com.proyecto.Modelos.Tarea t : media) {
+                modelMedia.addRow(new Object[]{t.getId(), t.getNombre(), t.getDescripcion(), t.getFecha().format(df), t.getHora().format(tf), t.getEstado()});
+            }
+            for (main.java.com.proyecto.Modelos.Tarea t : baja) {
+                modelBaja.addRow(new Object[]{t.getId(), t.getNombre(), t.getDescripcion(), t.getFecha().format(df), t.getHora().format(tf), t.getEstado()});
+            }
+
+            JTable tableAlta = new JTable(modelAlta);
+            JTable tableMedia = new JTable(modelMedia);
+            JTable tableBaja = new JTable(modelBaja);
+
+            tableAlta.setFillsViewportHeight(true);
+            tableMedia.setFillsViewportHeight(true);
+            tableBaja.setFillsViewportHeight(true);
+
+            tableAlta.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            tableMedia.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+            tableBaja.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+            // Create tabbed pane with three tabs
+            JTabbedPane tabs = new JTabbedPane();
+            tabs.addTab("ALTA (" + alta.size() + ")", new JScrollPane(tableAlta));
+            tabs.addTab("MEDIA (" + media.size() + ")", new JScrollPane(tableMedia));
+            tabs.addTab("BAJA (" + baja.size() + ")", new JScrollPane(tableBaja));
+
+            // Dialog to show tables
+            JDialog dlg = new JDialog(this, "Tareas - Tabla por Prioridad", true);
+            dlg.getContentPane().setLayout(new BorderLayout(8,8));
+            dlg.getContentPane().add(tabs, BorderLayout.CENTER);
+            dlg.setSize(900, 600);
             dlg.setLocationRelativeTo(this);
             dlg.setVisible(true);
         });
@@ -150,5 +191,5 @@ public class Main extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Main().setVisible(true));
-    }
+     }
 }
