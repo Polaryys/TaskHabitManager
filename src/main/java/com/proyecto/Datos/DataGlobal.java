@@ -212,7 +212,7 @@ public class DataGlobal {
         return actualizado;
     }
 
-    // Return all tasks from the CSV as a list
+    // Método que retorna una lista con todas las tareas
     public List<Tarea> obtenerTareasList() {
         List<Tarea> tareas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_TAREAS))) {
@@ -232,7 +232,7 @@ public class DataGlobal {
                     Tarea t = new Tarea(id, nombre, estado, fecha, hora, descripcion, prioridad);
                     tareas.add(t);
                 } catch (Exception ex) {
-                    // Skip malformed lines but keep going
+                    // salta líneas mal formadas pero continúa
                     System.err.println("Warning: skipping malformed tarea line: " + line);
                 }
             }
