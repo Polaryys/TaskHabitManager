@@ -29,8 +29,8 @@ public class Main extends JFrame {
         JButton NewHabit = new JButton("Nuevo Hábito");
         styleButton(NewHabit, buttonFont, new Color(14, 84, 129), textColor);
 
-    JButton ShowTasks = new JButton("Mostrar Tareas");
-    styleButton(ShowTasks, buttonFont, new Color(10, 100, 50), textColor);
+        JButton ShowTasks = new JButton("Mostrar Tareas");
+        styleButton(ShowTasks, buttonFont, new Color(10, 100, 50), textColor);
 
         JButton EditActivity = new JButton("Editar Actividad");
         styleButton(EditActivity, buttonFont, new Color(22, 125, 4), textColor);
@@ -88,10 +88,9 @@ public class Main extends JFrame {
         );
 
         ShowTasks.addActionListener(e -> {
-            // Fetch ordered tasks
+    
             java.util.List<main.java.com.proyecto.Modelos.Tarea> tareas = gestor.obtenerTareasOrdenadas();
 
-            // Separate by priority
             java.util.List<main.java.com.proyecto.Modelos.Tarea> alta = new java.util.ArrayList<>();
             java.util.List<main.java.com.proyecto.Modelos.Tarea> media = new java.util.ArrayList<>();
             java.util.List<main.java.com.proyecto.Modelos.Tarea> baja = new java.util.ArrayList<>();

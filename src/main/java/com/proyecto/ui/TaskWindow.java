@@ -27,7 +27,7 @@ public class TaskWindow extends JDialog {
         super(parent, "Nueva Tarea", true);
         this.gestor = gestor2;
 
-        setUndecorated(true);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setSize(420, 330);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
@@ -36,10 +36,7 @@ public class TaskWindow extends JDialog {
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(COLOR_TARJETA);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(COLOR_SECUNDARIO, 2),
-                BorderFactory.createEmptyBorder(18, 18, 18, 18)
-        ));
+        BorderFactory.createEmptyBorder(18, 18, 18, 18);
 
         JLabel titulo = new JLabel("CREAR NUEVA TAREA");
         titulo.setFont(FUENTE_TITULO);
