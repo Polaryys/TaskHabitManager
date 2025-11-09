@@ -5,6 +5,7 @@ import main.java.com.proyecto.Datos.DataGlobal;
 import main.java.com.proyecto.Gestor.Gestor;
 import java.awt.*;
 
+
 public class Main extends JFrame {
 
     private Gestor gestor;
@@ -21,26 +22,26 @@ public class Main extends JFrame {
         DataGlobal dataGlobal = new DataGlobal();
         gestor = new Gestor(dataGlobal);
 
-        Font buttonFont = new Font("Arial", Font.BOLD, 20);
-        Color textColor = new Color(232, 232, 232);
+        Font buttonFont = Colours.B_Grande;
+        Color textColor = Colours.Cl_BGrande;
 
         JButton NewTask = new JButton("Nueva Tarea");
-        styleButton(NewTask, buttonFont, new Color(14, 84, 129), textColor);
+        styleButton(NewTask, buttonFont, Colours.B_Blue, textColor);
 
         JButton NewHabit = new JButton("Nuevo Hábito");
-        styleButton(NewHabit, buttonFont, new Color(14, 84, 129), textColor);
+        styleButton(NewHabit, buttonFont, Colours.B_Blue, textColor);
 
         JButton ShowTasks = new JButton("Mostrar Tareas");
-        styleButton(ShowTasks, buttonFont, new Color(10, 100, 50), textColor);
+        styleButton(ShowTasks, buttonFont, Colours.B_Green, textColor);
 
         JButton EditActivity = new JButton("Editar Actividad");
-        styleButton(EditActivity, buttonFont, new Color(22, 125, 4), textColor);
+        styleButton(EditActivity, buttonFont, Colours.B_Green, textColor);
 
         JButton DeleteActivity = new JButton("Eliminar Actividad");
-        styleButton(DeleteActivity, buttonFont, new Color(159, 37, 6), textColor);
+        styleButton(DeleteActivity, buttonFont,Colours.B_Red, textColor);
 
         JButton Report = new JButton("Reporte semanal");
-        styleButton(Report, buttonFont, new Color(128, 0, 128), textColor);
+        styleButton(Report, buttonFont, Colours.B_Purple, textColor);
 
         JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -148,13 +149,11 @@ public class Main extends JFrame {
             tableMedia.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
             tableBaja.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-            // Create tabbed pane with three tabs
             JTabbedPane tabs = new JTabbedPane();
             tabs.addTab("ALTA (" + alta.size() + ")", new JScrollPane(tableAlta));
             tabs.addTab("MEDIA (" + media.size() + ")", new JScrollPane(tableMedia));
             tabs.addTab("BAJA (" + baja.size() + ")", new JScrollPane(tableBaja));
 
-            // Dialog to show tables
             JDialog dlg = new JDialog(this, "Tareas - Tabla por Prioridad", true);
             dlg.getContentPane().setLayout(new BorderLayout(8,8));
             dlg.getContentPane().add(tabs, BorderLayout.CENTER);

@@ -12,13 +12,6 @@ import java.awt.*;
 
 public class EditWindow extends JDialog {
 
-    // Paleta de colores (igual que en tus otras ventanas)
-    private final Color COLOR_PRIMARIO = new Color(41, 128, 185);
-    @SuppressWarnings("unused")
-    private final Color COLOR_SECUNDARIO = new Color(52, 152, 219);
-    private final Color COLOR_FONDO = new Color(245, 245, 245);
-    private final Color COLOR_BOTON_HOVER = new Color(33, 97, 140);
-
     @SuppressWarnings("unused")
     private Gestor gestor;
 
@@ -29,7 +22,7 @@ public class EditWindow extends JDialog {
         setSize(350, 200);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));
-        getContentPane().setBackground(COLOR_FONDO);
+        getContentPane().setBackground(Colours.Cl_Fondo);
 
         // Panel con fondo blanco y bordes redondeados simulados
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
@@ -39,11 +32,10 @@ public class EditWindow extends JDialog {
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        // Botón estilizado 1
         JButton btnTarea = new JButton("Tarea");
         styleButton(btnTarea);
 
-        // Botón estilizado 2
+
         JButton btnHabito = new JButton("Hábito");
         styleButton(btnHabito);
 
@@ -52,7 +44,6 @@ public class EditWindow extends JDialog {
 
         add(centerPanel, BorderLayout.CENTER);
 
-        // LÓGICA ORIGINAL (NO TOCADA)
         btnTarea.addActionListener(e -> {
             dispose();
             TaskEdit te = new TaskEdit(parent, gestor);
@@ -66,25 +57,22 @@ public class EditWindow extends JDialog {
         });
     }
 
-    /** Estilos aplicados a todos los botones */
     private void styleButton(JButton btn) {
         btn.setFocusPainted(false);
-        btn.setBackground(COLOR_PRIMARIO);
+        btn.setBackground(Colours.Cl_Guardar);
         btn.setForeground(Color.WHITE);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btn.setPreferredSize(new Dimension(110, 40));
         btn.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-
-        // Efecto hover
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
-                btn.setBackground(COLOR_BOTON_HOVER);
+                btn.setBackground(Colours.COLOR_BOTON_HOVER);
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                btn.setBackground(COLOR_PRIMARIO);
+                btn.setBackground(Colours.Cl_Guardar);
             }
         });
     }
@@ -352,7 +340,7 @@ public class EditWindow extends JDialog {
         setSize(430, 450);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
-        getContentPane().setBackground(COLOR_FONDO);
+        getContentPane().setBackground(Colours.Cl_Fondo);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -526,17 +514,17 @@ public class EditWindow extends JDialog {
     private JButton styledButton(String text) {
         JButton btn = new JButton(text);
         btn.setFocusPainted(false);
-        btn.setBackground(COLOR_PRIMARIO);
+        btn.setBackground(Colours.Cl_Guardar);
         btn.setForeground(Color.WHITE);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mouseEntered(java.awt.event.MouseEvent e) {
-                btn.setBackground(COLOR_BOTON_HOVER);
+                btn.setBackground(Colours.COLOR_BOTON_HOVER);
             }
             @Override public void mouseExited(java.awt.event.MouseEvent e) {
-                btn.setBackground(COLOR_PRIMARIO);
+                btn.setBackground(Colours.Cl_Guardar);
             }
         });
         return btn;

@@ -10,17 +10,7 @@ public class DeleteWindow extends JDialog {
     @SuppressWarnings("unused")
     private Gestor gestor;
 
-    private final Color COLOR_PRIMARIO = new Color(41, 128, 185);
-    private final Color COLOR_SECUNDARIO = new Color(52, 152, 219);
-    private final Color COLOR_ALERTA = new Color(231, 76, 60);
-    private final Color COLOR_FONDO = new Color(245, 245, 245);
-    private final Color COLOR_TARJETA = Color.WHITE;
-    private final Color COLOR_TEXTO = new Color(52, 73, 94);
-
-    private final Font FUENTE_TITULO = new Font("Segoe UI", Font.BOLD, 18);
-    private final Font FUENTE_LABEL = new Font("Segoe UI", Font.PLAIN, 14);
-    private final Font FUENTE_BOTON = new Font("Segoe UI", Font.BOLD, 14);
-    private final Font FUENTE_INFO = new Font("Segoe UI", Font.PLAIN, 13);
+    
 
     public DeleteWindow(JFrame parent, Gestor gestor) {
         super(parent, "Eliminar Actividad", true);
@@ -30,38 +20,38 @@ public class DeleteWindow extends JDialog {
         setSize(480, 360);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
-        getContentPane().setBackground(COLOR_FONDO);
+        getContentPane().setBackground(Colours.Cl_Fondo);
 
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(12, 12));
-        mainPanel.setBackground(COLOR_TARJETA);
+        mainPanel.setBackground(Colours.Cl_Tarjeta);
         mainPanel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(COLOR_SECUNDARIO, 1),
+                new LineBorder(Colours.Cl_Guardar, 1),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
 
 
         JLabel titulo = new JLabel("ELIMINAR ACTIVIDAD");
-        titulo.setFont(FUENTE_TITULO);
-        titulo.setForeground(COLOR_PRIMARIO);
+        titulo.setFont(Colours.Ft_Titulo);
+        titulo.setForeground(Colours.Cl_Titulo);
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
         titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         mainPanel.add(titulo, BorderLayout.NORTH);
 
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        topPanel.setBackground(COLOR_TARJETA);
+        topPanel.setBackground(Colours.Cl_Tarjeta);
 
         JLabel lblId = new JLabel("ID:");
-        lblId.setFont(FUENTE_LABEL);
-        lblId.setForeground(COLOR_TEXTO);
+        lblId.setFont(Colours.Ft_Label);
+        lblId.setForeground(Colours.Cl_Texto);
 
         JTextField txtId = new JTextField(10);
-        txtId.setFont(FUENTE_LABEL);
+        txtId.setFont(Colours.Ft_Label);
         txtId.setPreferredSize(new Dimension(120, 28));
 
-        JButton btnBuscar = crearBoton("Buscar", COLOR_SECUNDARIO);
+        JButton btnBuscar = crearBoton("Buscar", Colours.Cl_Guardar);
 
         topPanel.add(lblId);
         topPanel.add(txtId);
@@ -72,30 +62,30 @@ public class DeleteWindow extends JDialog {
 
         JTextArea infoArea = new JTextArea();
         infoArea.setEditable(false);
-        infoArea.setFont(FUENTE_INFO);
-        infoArea.setForeground(COLOR_TEXTO);
+        infoArea.setFont(Colours.Ft_Info);
+        infoArea.setForeground(Colours.Cl_Texto);
         infoArea.setBackground(Color.WHITE);
         infoArea.setLineWrap(true);
         infoArea.setWrapStyleWord(true);
         infoArea.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
         JScrollPane scrollPane = new JScrollPane(infoArea);
-        scrollPane.setBorder(new LineBorder(COLOR_SECUNDARIO, 1));
+        scrollPane.setBorder(new LineBorder(Colours.Cl_Guardar, 1));
         scrollPane.setPreferredSize(new Dimension(380, 150));
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BorderLayout());
-        infoPanel.setBackground(COLOR_TARJETA);
+        infoPanel.setBackground(Colours.Cl_Fondo);
         infoPanel.add(scrollPane, BorderLayout.CENTER);
 
         mainPanel.add(infoPanel, BorderLayout.SOUTH);
 
 
-        JButton btnEliminar = crearBoton("Eliminar", COLOR_ALERTA);
+        JButton btnEliminar = crearBoton("Eliminar", Colours.Cl_Cancelar);
         btnEliminar.setEnabled(false);
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setBackground(COLOR_TARJETA);
+        bottomPanel.setBackground(Colours.Cl_Tarjeta);
         bottomPanel.add(btnEliminar);
 
         add(mainPanel, BorderLayout.CENTER);
@@ -149,7 +139,7 @@ public class DeleteWindow extends JDialog {
         btn.setPreferredSize(new Dimension(120, 32));
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
-        btn.setFont(FUENTE_BOTON);
+        btn.setFont(Colours.Ft_Boton);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setBorder(BorderFactory.createLineBorder(color.darker(), 2));
