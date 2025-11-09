@@ -11,12 +11,13 @@ public class Main extends JFrame {
 
     public Main() {
         setTitle("Gestor de Actividades");
-        setSize(1440, 980);
+        setSize(1360, 780);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/TasksIcon.png");
+        setIconImage(icon);
         DataGlobal dataGlobal = new DataGlobal();
         gestor = new Gestor(dataGlobal);
 

@@ -14,6 +14,7 @@ public class EditWindow extends JDialog {
 
     // Paleta de colores (igual que en tus otras ventanas)
     private final Color COLOR_PRIMARIO = new Color(41, 128, 185);
+    @SuppressWarnings("unused")
     private final Color COLOR_SECUNDARIO = new Color(52, 152, 219);
     private final Color COLOR_FONDO = new Color(245, 245, 245);
     private final Color COLOR_BOTON_HOVER = new Color(33, 97, 140);
@@ -90,8 +91,9 @@ public class EditWindow extends JDialog {
 
 
     class TaskEdit extends JDialog {
-
+        
     private final Color COLOR_PRIMARIO = new Color(41, 128, 185);
+    @SuppressWarnings("unused")
     private final Color COLOR_SECUNDARIO = new Color(52, 152, 219);
     private final Color COLOR_FONDO = new Color(245, 245, 245);
     private final Color COLOR_BOTON_HOVER = new Color(33, 97, 140);

@@ -1,7 +1,6 @@
 package main.java.com.proyecto.ui;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -7,7 +7,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class DeleteWindow extends JDialog {
-
+    @SuppressWarnings("unused")
     private Gestor gestor;
 
     private final Color COLOR_PRIMARIO = new Color(41, 128, 185);
