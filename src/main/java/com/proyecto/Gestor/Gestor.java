@@ -128,22 +128,22 @@ public class Gestor {
         dataGlobal.updateHabito(h);
     }
 
-    // Return tasks ordered by priority (ALTA, MEDIA, BAJA), then date, then time
+    // Método que retorna una lista de tareas ordenadas por prioridad, fecha y hora
     public List<Tarea> obtenerTareasOrdenadas() {
         List<Tarea> tareas = dataGlobal.obtenerTareasList();
         Collections.sort(tareas, new Comparator<Tarea>() {
             @Override
             public int compare(Tarea t1, Tarea t2) {
-                // Priority: ALTA > MEDIA > BAJA. The enum ordering is BAJA, MEDIA, ALTA so compare reverse
+                //Prioridad primeo, luego fecha, luego hora
                 int p1 = t1.getPrioridad().ordinal();
                 int p2 = t2.getPrioridad().ordinal();
                 if (p1 != p2) {
-                    return Integer.compare(p2, p1); // higher ordinal = higher priority (ALTA)
+                    return Integer.compare(p2, p1); // Más alta prioridad primero
                 }
-                // Same priority: compare date
+                // MIsma prioridad: comparar fecha
                 int fechaComp = t1.getFecha().compareTo(t2.getFecha());
                 if (fechaComp != 0) return fechaComp;
-                // Same date: compare time
+                // Misma fecha: comparar hora
                 return t1.getHora().compareTo(t2.getHora());
             }
         });

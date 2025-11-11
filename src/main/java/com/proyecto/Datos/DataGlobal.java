@@ -93,27 +93,39 @@ public class DataGlobal {
         eliminarLinea(FILE_PATH_HABITOS, id);
     }
 
-    private void eliminarLinea(String filePath, int id) {
-        File originalFile = new File(filePath);
-        File tempFile = new File(filePath + ".tmp");
+private boolean eliminarLinea(String filePath, int id) {
+    File originalFile = new File(filePath);
+    File tempFile = new File(filePath + ".tmp");
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+    boolean deleted = false;
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (Integer.parseInt(parts[0]) != id) {
-                    writer.write(line + System.lineSeparator());
-                }
+    try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+         BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+
+            if (line.trim().isEmpty()) continue; // Línea vacía = se salta
+
+            String[] parts = line.trim().split("\\s*,\\s*");
+            int lineId = Integer.parseInt(parts[0]);
+
+            if (lineId != id) {
+                writer.write(line);
+                writer.newLine();
+            } else {
+                deleted = true;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        originalFile.delete();
-        tempFile.renameTo(originalFile);
+    } catch (IOException | NumberFormatException e) {
+        e.printStackTrace();
     }
+
+    originalFile.delete();
+    tempFile.renameTo(originalFile);
+
+    return deleted;
+}
 
     public static boolean updateTarea(Tarea tareaActualizada) {
         File original = new File(FILE_PATH_TAREAS);
@@ -212,7 +224,7 @@ public class DataGlobal {
         return actualizado;
     }
 
-    // Return all tasks from the CSV as a list
+    // Método que retorna una lista con todas las tareas
     public List<Tarea> obtenerTareasList() {
         List<Tarea> tareas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_TAREAS))) {
@@ -232,7 +244,7 @@ public class DataGlobal {
                     Tarea t = new Tarea(id, nombre, estado, fecha, hora, descripcion, prioridad);
                     tareas.add(t);
                 } catch (Exception ex) {
-                    // Skip malformed lines but keep going
+                    // salta líneas mal formadas pero continúa
                     System.err.println("Warning: skipping malformed tarea line: " + line);
                 }
             }

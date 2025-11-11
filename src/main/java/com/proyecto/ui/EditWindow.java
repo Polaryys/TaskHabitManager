@@ -8,9 +8,12 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 
 public class EditWindow extends JDialog {
+
     @SuppressWarnings("unused")
     private Gestor gestor;
 
@@ -18,14 +21,22 @@ public class EditWindow extends JDialog {
         super(parent, "Editar Actividad", true);
         this.gestor = gestor;
 
-        setSize(300, 180);
+        setSize(350, 200);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(Colours.Cl_Fondo);
 
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)));
 
         JButton btnTarea = new JButton("Tarea");
+        styleButton(btnTarea);
+
         JButton btnHabito = new JButton("Hábito");
+        styleButton(btnHabito);
 
         centerPanel.add(btnTarea);
         centerPanel.add(btnHabito);
@@ -45,6 +56,38 @@ public class EditWindow extends JDialog {
         });
     }
 
+    private void styleButton(JButton btn) {
+
+        String txt = btn.getText().toLowerCase();
+
+        Color baseColor = switch (txt) {
+            case "buscar" -> Colours.Cl_Buscar;
+            case "editar" -> Colours.Cl_Guardar;
+            case "cerrar" -> Colours.Cl_Cancelar;
+            default -> Colours.Cl_Guardar; // fallback
+        };
+
+        btn.setFocusPainted(false);
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setPreferredSize(new Dimension(110, 40));
+        btn.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+
+        btn.setBackground(baseColor);
+
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                btn.setBackground(baseColor.darker());
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                btn.setBackground(baseColor);
+            }
+        });
+    }
+
     class TaskEdit extends JDialog {
         @SuppressWarnings("unused")
         private Gestor gestor;
@@ -53,91 +96,120 @@ public class EditWindow extends JDialog {
             super(parent, "Editar Tarea", true);
             this.gestor = gestor;
 
-            setSize(430, 380);
+            setSize(430, 430);
             setLocationRelativeTo(parent);
             setLayout(new BorderLayout());
+            getContentPane().setBackground(Colours.Cl_Fondo);
 
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            mainPanel.setBackground(Color.WHITE);
+            mainPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+                    BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
-            JPanel rowId = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblId = new JLabel("ID:");
-            JTextField txtId = new JTextField();
-            txtId.setPreferredSize(new Dimension(100, 25));
+            JPanel rowId = createRow();
+            JLabel lblId = styledLabel("ID:");
+            JTextField txtId = styledTextField(100);
+
             JButton btnBuscar = new JButton("Buscar");
+            btnBuscar.setFocusPainted(false);
+            btnBuscar.setBackground(Colours.Cl_Buscar);
+            btnBuscar.setForeground(Color.WHITE);
+            btnBuscar.setFont(Colours.Ft_Boton);
+            btnBuscar.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+
+            btnBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    btnBuscar.setBackground(Colours.Cl_Buscar.brighter());
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    btnBuscar.setBackground(Colours.Cl_Buscar);
+                }
+            });
 
             rowId.add(lblId);
             rowId.add(txtId);
             rowId.add(btnBuscar);
             mainPanel.add(rowId);
 
-            JTextField txtNombre = new JTextField();
-            JTextField txtDescripcion = new JTextField();
+            JTextField txtNombre = styledTextField(200);
+            JTextField txtDescripcion = styledTextField(200);
 
             String[] prioridades = { "ALTA", "MEDIA", "BAJA" };
-            JComboBox<String> comboPrioridad = new JComboBox<>(prioridades);
+            JComboBox<String> comboPrioridad = styledCombo(prioridades);
 
             String[] estados = { "PENDIENTE", "COMPLETADO" };
-            JComboBox<String> comboEstado = new JComboBox<>(estados);
+            JComboBox<String> comboEstado = styledCombo(estados);
 
-            JTextField txtFecha = new JTextField();
-            JTextField txtHora = new JTextField();
+            JTextField txtFecha = styledTextField(120);
+            JTextField txtHora = styledTextField(120);
 
-            JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            row1.add(new JLabel("Nombre:"));
-            txtNombre.setPreferredSize(new Dimension(200, 25));
-            row1.add(txtNombre);
-            mainPanel.add(row1);
+            mainPanel.add(createLabeledRow("Nombre:", txtNombre));
+            mainPanel.add(createLabeledRow("Descripción:", txtDescripcion));
+            mainPanel.add(createLabeledRow("Prioridad:", comboPrioridad));
+            mainPanel.add(createLabeledRow("Estado:", comboEstado));
+            mainPanel.add(createLabeledRow("Fecha:", txtFecha));
+            mainPanel.add(createLabeledRow("Hora:", txtHora));
 
-            JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            row2.add(new JLabel("Descripción:"));
-            txtDescripcion.setPreferredSize(new Dimension(200, 25));
-            row2.add(txtDescripcion);
-            mainPanel.add(row2);
+            JPanel rowButtons = createRowCenter();
 
-            JPanel row3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            row3.add(new JLabel("Prioridad:"));
-            comboPrioridad.setPreferredSize(new Dimension(120, 25));
-            row3.add(comboPrioridad);
-            mainPanel.add(row3);
-
-            JPanel row4 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            row4.add(new JLabel("Estado:"));
-            comboEstado.setPreferredSize(new Dimension(120, 25));
-            row4.add(comboEstado);
-            mainPanel.add(row4);
-
-            JPanel row5 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            row5.add(new JLabel("Fecha:"));
-            txtFecha.setPreferredSize(new Dimension(120, 25));
-            row5.add(txtFecha);
-            mainPanel.add(row5);
-
-            JPanel row6 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            row6.add(new JLabel("Hora:"));
-            txtHora.setPreferredSize(new Dimension(120, 25));
-            row6.add(txtHora);
-            mainPanel.add(row6);
-
-            JPanel rowButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
             JButton btnEditar = new JButton("Editar");
-            JButton btnCerrar = new JButton("Cerrar");
+            btnEditar.setFocusPainted(false);
+            btnEditar.setBackground(Colours.Cl_Guardar);
+            btnEditar.setForeground(Color.WHITE);
+            btnEditar.setFont(Colours.Ft_Boton);
+            btnEditar.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+
+            btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    btnEditar.setBackground(Colours.Cl_Guardar.brighter());
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    btnEditar.setBackground(Colours.Cl_Guardar);
+                }
+            });
 
             btnEditar.setEnabled(false);
+
+            JButton btnCerrar = new JButton("Cerrar");
+            btnCerrar.setFocusPainted(false);
+            btnCerrar.setBackground(Colours.Cl_Cancelar);
+            btnCerrar.setForeground(Color.WHITE);
+            btnCerrar.setFont(Colours.Ft_Boton);
+            btnCerrar.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+
+            btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    btnCerrar.setBackground(Colours.Cl_Cancelar.brighter());
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    btnCerrar.setBackground(Colours.Cl_Cancelar);
+                }
+            });
 
             rowButtons.add(btnEditar);
             rowButtons.add(btnCerrar);
 
+            mainPanel.add(Box.createVerticalStrut(10));
             mainPanel.add(rowButtons);
 
             add(mainPanel, BorderLayout.CENTER);
 
             btnCerrar.addActionListener(e -> dispose());
+
             btnBuscar.addActionListener(e -> {
                 try {
                     int id = Integer.parseInt(txtId.getText().trim());
-
                     Tarea t = gestor.SearchTaskId(id);
 
                     if (t == null) {
@@ -147,24 +219,17 @@ public class EditWindow extends JDialog {
                         btnEditar.setEnabled(false);
                         return;
                     }
+
                     txtNombre.setText(t.getNombre());
                     txtDescripcion.setText(t.getDescripcion());
                     txtFecha.setText(t.getFecha().toString());
                     txtHora.setText(t.getHora().toString());
 
                     String pr = t.getPrioridad().toString().toUpperCase();
-                    if (Arrays.asList(prioridades).contains(pr)) {
-                        comboPrioridad.setSelectedItem(pr);
-                    } else {
-                        comboPrioridad.setSelectedItem("MEDIA");
-                    }
+                    comboPrioridad.setSelectedItem(Arrays.asList(prioridades).contains(pr) ? pr : "MEDIA");
 
                     String es = t.getEstado().toString().toUpperCase();
-                    if (Arrays.asList(estados).contains(es)) {
-                        comboEstado.setSelectedItem(es);
-                    } else {
-                        comboEstado.setSelectedItem("PENDIENTE");
-                    }
+                    comboEstado.setSelectedItem(Arrays.asList(estados).contains(es) ? es : "PENDIENTE");
 
                     btnEditar.setEnabled(true);
 
@@ -221,10 +286,11 @@ public class EditWindow extends JDialog {
                 try {
                     main.java.com.proyecto.Modelos.Actividad.State estadoEnum = main.java.com.proyecto.Modelos.Actividad.State
                             .valueOf(comboEstado.getSelectedItem().toString());
+
                     main.java.com.proyecto.Modelos.Tarea.Priority prioridadEnum = main.java.com.proyecto.Modelos.Tarea.Priority
                             .valueOf(comboPrioridad.getSelectedItem().toString());
 
-                    main.java.com.proyecto.Modelos.Tarea nueva = new main.java.com.proyecto.Modelos.Tarea(
+                    Tarea nueva = new Tarea(
                             id,
                             txtNombre.getText().trim(),
                             estadoEnum,
@@ -251,149 +317,285 @@ public class EditWindow extends JDialog {
                 }
             });
         }
+
+        private JPanel createRow() {
+            JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+            p.setBackground(Color.WHITE);
+            return p;
+        }
+
+        private JPanel createRowCenter() {
+            JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+            p.setBackground(Color.WHITE);
+            return p;
+        }
+
+        private JPanel createLabeledRow(String label, JComponent comp) {
+            JPanel row = createRow();
+            row.add(styledLabel(label));
+            row.add(comp);
+            return row;
+        }
+
+        private JLabel styledLabel(String txt) {
+            JLabel lbl = new JLabel(txt);
+            lbl.setFont(Colours.Ft_Label);
+            lbl.setForeground(Colours.Cl_Texto);
+            return lbl;
+        }
+
+        private JTextField styledTextField(int width) {
+            JTextField txt = new JTextField();
+            txt.setPreferredSize(new Dimension(width, 28));
+            txt.setFont(Colours.Ft_Label);
+            txt.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(180, 180, 180)),
+                    new EmptyBorder(3, 5, 3, 5)));
+            return txt;
+        }
+
+        private JComboBox<String> styledCombo(String[] items) {
+            JComboBox<String> combo = new JComboBox<>(items);
+            combo.setPreferredSize(new Dimension(120, 28));
+            combo.setFont(Colours.Ft_Label);
+            combo.setBackground(Color.WHITE);
+            combo.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)));
+            return combo;
+        }
     }
 
-    class HabitEdit extends JDialog {
-        @SuppressWarnings("unused")
-        private Gestor gestor;
+class HabitEdit extends JDialog {
 
-        public HabitEdit(JFrame parent, Gestor gestor) {
-            super(parent, "Editar Hábito", true);
-            this.gestor = gestor;
+    @SuppressWarnings("unused")
+    private Gestor gestor;
 
-            setSize(430, 320);
-            setLocationRelativeTo(parent);
-            setLayout(new BorderLayout());
+    public HabitEdit(JFrame parent, Gestor gestor) {
+        super(parent, "Editar Hábito", true);
+        this.gestor = gestor;
 
-            JPanel mainPanel = new JPanel();
-            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setSize(430, 450);
+        setLocationRelativeTo(parent);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Colours.Cl_Fondo);
 
-            JPanel rowId = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblId = new JLabel("ID:");
-            JTextField txtId = new JTextField();
-            txtId.setPreferredSize(new Dimension(100, 25));
-            JButton btnBuscar = new JButton("Buscar");
-            rowId.add(lblId);
-            rowId.add(txtId);
-            rowId.add(btnBuscar);
-            mainPanel.add(rowId);
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
 
-            JTextField txtNombre = new JTextField();
-            JComboBox<Habito.Frequency> cbFrecuencia = new JComboBox<>(Habito.Frequency.values());
-            JComboBox<Actividad.State> cbEstado = new JComboBox<>(Actividad.State.values());
-            JTextField txtFecha = new JTextField();
-            JTextField txtHora = new JTextField();
+        JPanel rowId = createRow();
+        JLabel lblId = styledLabel("ID:");
+        JTextField txtId = styledTextField(100);
 
-            JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblName = new JLabel("Nombre:");
-            txtNombre.setPreferredSize(new Dimension(200, 25));
-            row1.add(lblName);
-            row1.add(txtNombre);
-            mainPanel.add(row1);
+        JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.setFocusPainted(false);
+        btnBuscar.setBackground(Colours.Cl_Buscar);
+        btnBuscar.setForeground(Color.WHITE);
+        btnBuscar.setFont(Colours.Ft_Boton);
+        btnBuscar.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
-            JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblFreq = new JLabel("Frecuencia:");
-            row2.add(lblFreq);
-            row2.add(cbFrecuencia);
-            mainPanel.add(row2);
+        btnBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override 
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                btnBuscar.setBackground(Colours.Cl_Buscar.brighter());
+                btnBuscar.setForeground(Colours.Cl_BGrande);
+                
+            }
+            @Override 
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                btnBuscar.setBackground(Colours.Cl_Buscar);
+                btnBuscar.setForeground(Colours.Cl_BGrande);
+            }
+        });
 
-            JPanel row3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblEstado = new JLabel("Estado:");
-            row3.add(lblEstado);
-            row3.add(cbEstado);
-            mainPanel.add(row3);
+        rowId.add(lblId);
+        rowId.add(txtId);
+        rowId.add(btnBuscar);
+        mainPanel.add(rowId);
 
-            JPanel row4 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblDate = new JLabel("Fecha (AAAA-MM-DD):");
-            txtFecha.setPreferredSize(new Dimension(120, 25));
-            row4.add(lblDate);
-            row4.add(txtFecha);
-            mainPanel.add(row4);
+        JTextField txtNombre = styledTextField(200);
+        JComboBox<Habito.Frequency> cbFrecuencia = styledComboHabito(Habito.Frequency.values());
+        JComboBox<Actividad.State> cbEstado = styledComboEstado(Actividad.State.values());
+        JTextField txtFecha = styledTextField(120);
+        JTextField txtHora = styledTextField(80);
 
-            JPanel row5 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-            JLabel lblHour = new JLabel("Hora (HH:mm):");
-            txtHora.setPreferredSize(new Dimension(80, 25));
-            row5.add(lblHour);
-            row5.add(txtHora);
-            mainPanel.add(row5);
+        mainPanel.add(createLabeledRow("Nombre:", txtNombre));
+        mainPanel.add(createLabeledRow("Frecuencia:", cbFrecuencia));
+        mainPanel.add(createLabeledRow("Estado:", cbEstado));
+        mainPanel.add(createLabeledRow("Fecha:", txtFecha));
+        mainPanel.add(createLabeledRow("Hora:", txtHora));
 
-            JPanel rowButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-            JButton btnEditar = new JButton("Editar");
-            JButton btnCerrar = new JButton("Cerrar");
-            btnEditar.setEnabled(false);
-            rowButtons.add(btnEditar);
-            rowButtons.add(btnCerrar);
-            mainPanel.add(rowButtons);
+        JPanel rowButtons = createRowCenter();
 
-            add(mainPanel, BorderLayout.CENTER);
 
-            btnCerrar.addActionListener(e -> dispose());
+        JButton btnEditar = new JButton("Editar");
+        btnEditar.setFocusPainted(false);
+        btnEditar.setBackground(Colours.Cl_Guardar);
+        btnEditar.setForeground(Color.WHITE);
+        btnEditar.setFont(Colours.Ft_Boton);
+        btnEditar.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        btnEditar.setEnabled(false);
 
-            btnBuscar.addActionListener(e -> {
-                try {
-                    int id = Integer.parseInt(txtId.getText().trim());
-                    Habito h = gestor.SearchHabitId(id);
-                    if (h == null) {
-                        JOptionPane.showMessageDialog(this,
-                                "No se encontró un hábito con ese ID.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        btnEditar.setEnabled(false);
-                        return;
-                    }
-                    txtNombre.setText(h.getNombre());
-                    cbFrecuencia.setSelectedItem(h.getFrecuencia());
-                    cbEstado.setSelectedItem(h.getEstado());
-                    txtFecha.setText(h.getFecha().toString());
-                    txtHora.setText(h.getHora().toString());
+        btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                btnEditar.setBackground(Colours.Cl_Guardar.brighter());
+            }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                btnEditar.setBackground(Colours.Cl_Guardar);
+            }
+        });
 
-                    btnEditar.setEnabled(true);
+        JButton btnCerrar = new JButton("Cerrar");
+        btnCerrar.setFocusPainted(false);
+        btnCerrar.setBackground(Colours.Cl_Cancelar);
+        btnCerrar.setForeground(Color.WHITE);
+        btnCerrar.setFont(Colours.Ft_Boton);
+        btnCerrar.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
-                } catch (Exception ex) {
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+    @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+        btnCerrar.setBackground(Colours.Cl_Cancelar.brighter());
+    }
+
+    @Override public void mouseExited(java.awt.event.MouseEvent e) {
+        btnCerrar.setBackground(Colours.Cl_Cancelar);
+    }
+});
+
+        rowButtons.add(btnEditar);
+        rowButtons.add(btnCerrar);
+
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(rowButtons);
+
+        add(mainPanel, BorderLayout.CENTER);
+        btnCerrar.addActionListener(e -> dispose());
+
+        btnBuscar.addActionListener(e -> {
+            try {
+                int id = Integer.parseInt(txtId.getText().trim());
+                Habito h = gestor.SearchHabitId(id);
+
+                if (h == null) {
                     JOptionPane.showMessageDialog(this,
-                            "ID inválido.",
+                            "No se encontró un hábito con ese ID.",
                             "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            btnEditar.addActionListener(e -> {
-                String nombre = txtNombre.getText().trim();
-                String fechaStr = txtFecha.getText().trim();
-                String horaStr = txtHora.getText().trim();
-
-                if (nombre.isEmpty() || fechaStr.isEmpty() || horaStr.isEmpty()) {
-                    JOptionPane.showMessageDialog(this,
-                            "Todos los campos son obligatorios.",
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    btnEditar.setEnabled(false);
                     return;
                 }
 
-                try {
-                    LocalDate fecha = LocalDate.parse(fechaStr);
-                    LocalTime hora = LocalTime.parse(horaStr);
-                    Habito.Frequency frecuencia = (Habito.Frequency) cbFrecuencia.getSelectedItem();
-                    Actividad.State estado = (Actividad.State) cbEstado.getSelectedItem();
+                txtNombre.setText(h.getNombre());
+                cbFrecuencia.setSelectedItem(h.getFrecuencia());
+                cbEstado.setSelectedItem(h.getEstado());
+                txtFecha.setText(h.getFecha().toString());
+                txtHora.setText(h.getHora().toString());
 
-                    Habito hActualizado = new Habito(
-                            Integer.parseInt(txtId.getText().trim()),
-                            nombre,
-                            estado,
-                            fecha,
-                            hora,
-                            frecuencia);
+                btnEditar.setEnabled(true);
 
-                    gestor.updateHabito(hActualizado);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "ID inválido.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-                    JOptionPane.showMessageDialog(this,
-                            "Hábito actualizado correctamente.");
-                    dispose();
-                } catch (DateTimeParseException ex) {
-                    JOptionPane.showMessageDialog(this,
-                            "Formato de fecha o hora inválido.",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-        }
+        btnEditar.addActionListener(e -> {
+            String nombre = txtNombre.getText().trim();
+            String fechaStr = txtFecha.getText().trim();
+            String horaStr = txtHora.getText().trim();
+
+            if (nombre.isEmpty() || fechaStr.isEmpty() || horaStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Todos los campos son obligatorios.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                LocalDate fecha = LocalDate.parse(fechaStr);
+                LocalTime hora = LocalTime.parse(horaStr);
+                Habito.Frequency frecuencia = (Habito.Frequency) cbFrecuencia.getSelectedItem();
+                Actividad.State estado = (Actividad.State) cbEstado.getSelectedItem();
+
+                Habito hActualizado = new Habito(
+                        Integer.parseInt(txtId.getText().trim()),
+                        nombre,
+                        estado,
+                        fecha,
+                        hora,
+                        frecuencia);
+
+                gestor.updateHabito(hActualizado);
+
+                JOptionPane.showMessageDialog(this,
+                        "Hábito actualizado correctamente.");
+                dispose();
+
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Formato de fecha o hora inválido.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
+
+
+    private JPanel createRow() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        p.setBackground(Color.WHITE);
+        return p;
+    }
+
+    private JPanel createRowCenter() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        p.setBackground(Color.WHITE);
+        return p;
+    }
+
+    private JPanel createLabeledRow(String label, JComponent comp) {
+        JPanel row = createRow();
+        row.add(styledLabel(label));
+        row.add(comp);
+        return row;
+    }
+
+    private JLabel styledLabel(String txt) {
+        JLabel lbl = new JLabel(txt);
+        lbl.setFont(Colours.Ft_Label);
+        return lbl;
+    }
+
+    private JTextField styledTextField(int width) {
+        JTextField txt = new JTextField();
+        txt.setPreferredSize(new Dimension(width, 28));
+        txt.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txt.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(180, 180, 180)),
+                BorderFactory.createEmptyBorder(3, 5, 3, 5)
+        ));
+        return txt;
+    }
+
+    private <T> JComboBox<T> styledComboHabito(T[] items) {
+        JComboBox<T> combo = new JComboBox<>(items);
+        combo.setPreferredSize(new Dimension(120, 28));
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        combo.setBackground(Color.WHITE);
+        combo.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)));
+        return combo;
+    }
+
+    private <T> JComboBox<T> styledComboEstado(T[] items) {
+        JComboBox<T> combo = new JComboBox<>(items);
+        combo.setPreferredSize(new Dimension(120, 28));
+        combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        combo.setBackground(Color.WHITE);
+        combo.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)));
+        return combo;
+    }
+}
 
 }

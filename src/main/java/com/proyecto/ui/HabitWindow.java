@@ -1,10 +1,7 @@
-
-
 package main.java.com.proyecto.ui;
 
 import main.java.com.proyecto.Gestor.Gestor;
 import main.java.com.proyecto.Modelos.Habito;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,53 +11,68 @@ import java.time.LocalTime;
 public class HabitWindow extends JDialog {
     private Gestor gestor;
 
+    
+    
+    
+
+    
+
     public HabitWindow(JFrame parent, Gestor gestor2) {
         super(parent, "Nuevo Hábito", true);
         this.gestor = gestor2;
 
-        setSize(450, 300);
+        setSize(450, 320);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(Colours.Cl_Fondo);
 
         JPanel mainPanel = new JPanel();
+        mainPanel.setBackground(Colours.Cl_Tarjeta);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
 
-        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel lblName = new JLabel("Nombre:");
-        JTextField txtName = new JTextField();
-        txtName.setPreferredSize(new Dimension(200, 25));
-        row1.add(lblName);
-        row1.add(txtName);
+        JLabel titulo = new JLabel("CREAR NUEVO HÁBITO");
+        titulo.setFont(Colours.Ft_Titulo);
+        titulo.setForeground(Colours.Cl_Titulo);
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        mainPanel.add(titulo);
+
+        JPanel row1 = crearFila("Nombre:", 200);
+        JTextField txtName = (JTextField) row1.getComponent(1);
         mainPanel.add(row1);
 
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel lblFreq = new JLabel("Frecuencia (DIARIO, SEMANAL, MENSUAL):");
-        JTextField txtFreq = new JTextField();
-        txtFreq.setPreferredSize(new Dimension(150, 25));
+        row2.setBackground(Colours.Cl_Tarjeta);
+
+        JLabel lblFreq = new JLabel("Frecuencia:");
+        lblFreq.setFont(Colours.Ft_Label);
+        lblFreq.setForeground(Colours.Cl_Texto);
+
+        JComboBox<String> cmbFreq = new JComboBox<>(new String[]{
+                "DIARIO", "SEMANAL", "MENSUAL"
+        });
+        cmbFreq.setFont(Colours.Ft_Label);
+        cmbFreq.setPreferredSize(new Dimension(140, 28));
+
         row2.add(lblFreq);
-        row2.add(txtFreq);
+        row2.add(cmbFreq);
         mainPanel.add(row2);
 
-        JPanel row3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel lblDate = new JLabel("Fecha (AAAA-MM-DD):");
-        JTextField txtDate = new JTextField();
-        txtDate.setPreferredSize(new Dimension(100, 25));
-        row3.add(lblDate);
-        row3.add(txtDate);
+        JPanel row3 = crearFila("Fecha (AAAA-MM-DD):", 120);
+        JTextField txtDate = (JTextField) row3.getComponent(1);
         mainPanel.add(row3);
 
-        JPanel row4 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JLabel lblHour = new JLabel("Hora (HH:mm):");
-        JTextField txtHour = new JTextField();
-        txtHour.setPreferredSize(new Dimension(80, 25));
-        row4.add(lblHour);
-        row4.add(txtHour);
+        JPanel row4 = crearFila("Hora (HH:mm):", 80);
+        JTextField txtHour = (JTextField) row4.getComponent(1);
         mainPanel.add(row4);
 
-        JPanel row5 = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton btnGuardar = new JButton("Guardar");
-        JButton btnCancelar = new JButton("Cancelar");
+        JPanel row5 = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 12));
+        row5.setBackground(Colours.Cl_Tarjeta);
+
+        JButton btnGuardar = crearBoton("Guardar", Colours.Cl_Guardar);
+        JButton btnCancelar = crearBoton("Cancelar", Colours.Cl_Cancelar);
+
         row5.add(btnGuardar);
         row5.add(btnCancelar);
         mainPanel.add(row5);
@@ -71,11 +83,12 @@ public class HabitWindow extends JDialog {
             try {
 
                 String nombre = txtName.getText().trim();
-                String freqStr = txtFreq.getText().trim().toUpperCase();
+                String freqStr = ((String) cmbFreq.getSelectedItem()).toUpperCase(); // COMBOBOX
                 String fechaStr = txtDate.getText().trim();
                 String horaStr = txtHour.getText().trim();
 
-                if(nombre.isEmpty() || freqStr.isEmpty() || fechaStr.isEmpty() || horaStr.isEmpty()) {
+                if (nombre.isEmpty() || freqStr.isEmpty() ||
+                        fechaStr.isEmpty() || horaStr.isEmpty()) {
                     JOptionPane.showMessageDialog(this,
                             "Todos los campos son obligatorios.",
                             "Error",
@@ -110,5 +123,34 @@ public class HabitWindow extends JDialog {
         });
 
         btnCancelar.addActionListener(e -> dispose());
+    }
+
+    private JPanel crearFila(String label, int width) {
+        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        row.setBackground(Colours.Cl_Tarjeta);
+
+        JLabel lbl = new JLabel(label);
+        lbl.setFont(Colours.Ft_Label);
+        lbl.setForeground(Colours.Cl_Texto);
+
+        JTextField txt = new JTextField();
+        txt.setPreferredSize(new Dimension(width, 28));
+        txt.setFont(Colours.Ft_Label);
+
+        row.add(lbl);
+        row.add(txt);
+        return row;
+    }
+
+    private JButton crearBoton(String texto, Color color) {
+        JButton btn = new JButton(texto);
+        btn.setPreferredSize(new Dimension(125, 34));
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setFont(Colours.Ft_Boton);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setBorder(BorderFactory.createLineBorder(color.darker(), 2));
+        return btn;
     }
 }

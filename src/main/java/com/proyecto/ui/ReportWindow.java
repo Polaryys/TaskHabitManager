@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReportWindow extends JDialog {
+    @SuppressWarnings("unused")
     private Gestor gestor;
     private JPanel mainPanel;
     
@@ -32,6 +33,7 @@ public class ReportWindow extends JDialog {
     private final Font FUENTE_TEXTO_NORMAL = new Font("Segoe UI", Font.PLAIN, 14);
     private final Font FUENTE_TEXTO_PEQUEÑO = new Font("Segoe UI", Font.PLAIN, 12);
     private final Font FUENTE_METRICA_GRANDE = new Font("Segoe UI", Font.BOLD, 24);
+    @SuppressWarnings("unused")
     private final Font FUENTE_METRICA_MEDIANA = new Font("Segoe UI", Font.BOLD, 14);
 
     private final int ESPACIO_VERTICAL_SECCIONES = 8;
