@@ -5,10 +5,10 @@ import main.java.com.proyecto.Datos.DataGlobal;
 import main.java.com.proyecto.Gestor.Gestor;
 import java.awt.*;
 
-
 public class Main extends JFrame {
 
     private Gestor gestor;
+    private JPanel mainContentPanel; // Panel para el contenido principal
 
     public Main() {
         setTitle("Gestor de Actividades");
@@ -22,6 +22,8 @@ public class Main extends JFrame {
         DataGlobal dataGlobal = new DataGlobal();
         gestor = new Gestor(dataGlobal);
 
+        // paso a complete window sino estuvieran botones duplicados 
+        /*
         Font buttonFont = Colours.B_Grande;
         Color textColor = Colours.Cl_BGrande;
 
@@ -31,7 +33,7 @@ public class Main extends JFrame {
         JButton NewHabit = new JButton("Nuevo Hábito");
         styleButton(NewHabit, buttonFont, Colours.B_Blue, textColor);
 
-        JButton ShowTasks = new JButton("Mostrar Tareas");
+        JButton ShowTasks = new JButton("Filtrar Por Prioridad");
         styleButton(ShowTasks, buttonFont, Colours.B_Green, textColor);
 
         JButton EditActivity = new JButton("Editar Actividad");
@@ -50,7 +52,6 @@ public class Main extends JFrame {
         fila1.add(Report);
         fila1.add(ShowTasks);
 
-
         JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         fila2.add(EditActivity);
         fila2.add(DeleteActivity);
@@ -61,7 +62,18 @@ public class Main extends JFrame {
         topPanel.add(fila2);
 
         add(topPanel, BorderLayout.NORTH);
+        */
 
+        // Panel principal donde se mostrará el contenido
+        mainContentPanel = new JPanel(new BorderLayout());
+        mainContentPanel.setBackground(Color.WHITE);
+        add(mainContentPanel, BorderLayout.CENTER);
+
+        // para mostrar el panel con la info al iniciar 
+        mostrarCompleteWindow();
+
+        // no necesario paso a completewindow 
+        /*
         NewTask.addActionListener(e -> {
             TaskWindow dialog = new TaskWindow(this, gestor);
             dialog.setVisible(true);
@@ -82,15 +94,12 @@ public class Main extends JFrame {
             dialog.setVisible(true);
         });
 
-
         Report.addActionListener(e -> {
             ReportWindow dialog = new ReportWindow(this, gestor);
             dialog.setVisible(true);
-        }
-        );
+        });
 
         ShowTasks.addActionListener(e -> {
-    
             java.util.List<main.java.com.proyecto.Modelos.Tarea> tareas = gestor.obtenerTareasOrdenadas();
 
             java.util.List<main.java.com.proyecto.Modelos.Tarea> alta = new java.util.ArrayList<>();
@@ -161,9 +170,24 @@ public class Main extends JFrame {
             dlg.setLocationRelativeTo(this);
             dlg.setVisible(true);
         });
-
+        */
     }
 
+    // Método para mostrar el panel en el espacio en blanco 
+    private void mostrarCompleteWindow() {
+        mainContentPanel.removeAll();
+        
+        // Usar directamente el CompleteWindow (que ahora es JPanel)
+        CompleteWindow completePanel = new CompleteWindow(gestor);
+        mainContentPanel.add(completePanel, BorderLayout.CENTER);
+        
+        mainContentPanel.revalidate();
+        mainContentPanel.repaint();
+        setTitle("Gestor de Actividades - Completar Tareas y Hábitos");
+    }
+
+    // metodo ya no necesario porque paso a Complete window
+    /*
     private void styleButton(JButton button, Font font, Color bg, Color fg) {
         button.setFont(font);
         button.setBackground(bg.darker());
@@ -187,6 +211,7 @@ public class Main extends JFrame {
             }
         });
     }
+    */
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Main().setVisible(true));

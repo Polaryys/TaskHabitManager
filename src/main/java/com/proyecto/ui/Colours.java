@@ -16,10 +16,9 @@ public class Colours {
     public static final Color Cl_Guardar = new Color(104, 142, 38);
     public static final Color Cl_Cancelar = new Color(161, 7, 2);
     
-
-    public static final Font B_Grande = new Font("Arial", Font.BOLD, 20);
-    public static final Font Ft_Titulo = new Font("Segoe UI", Font.BOLD, 18);
-    public static final Font Ft_Label = new Font("Segoe UI", Font.PLAIN, 14);
-    public static final Font Ft_Boton = new Font("Segoe UI", Font.BOLD, 14);
-    public static final Font Ft_Info = new Font("Segoe UI", Font.PLAIN, 13);
+    public static final Font B_Grande = new Font("Segoe UI", Font.BOLD, 26);
+    public static final Font Ft_Titulo = new Font("Segoe UI", Font.BOLD, 20);
+    public static final Font Ft_Label = new Font("Segoe UI", Font.PLAIN, 16);
+    public static final Font Ft_Boton = new Font("Segoe UI", Font.BOLD, 16);
+    public static final Font Ft_Info = new Font("Segoe UI", Font.PLAIN, 14);
 }
