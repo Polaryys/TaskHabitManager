@@ -1,7 +1,9 @@
+#ID,Nombre,Descripcion,Prioridad,Estado,Hora,Fecha
+895,Matem�tica,Ecuaciones Tercer Grado,ALTA,COMPLETADO,18:30,2025-10-26
 562,Fisica,Calcular Aceleración,ALTA,PENDIENTE,09:00,2025-11-03
-528,MATE,Ecuaciones,MEDIA,PENDIENTE,23:59,2025-11-02
-895,Matem�tica,Ecuaciones Tercer Grado,ALTA,PENDIENTE,18:30,2025-10-26
-724,Calculo,Limites,BAJA,PENDIENTE,18:41,2025-10-30
 85,Física,Gravedad,ALTA,PENDIENTE,05:00,2025-11-20
+528,MATE,Ecuaciones,MEDIA,PENDIENTE,23:59,2025-11-02
+724,Calculo,Limites,BAJA,PENDIENTE,18:41,2025-10-30
 593,Ingles,Listening,BAJA,PENDIENTE,23:59,2025-11-26
 428,Ingles,Listening,MEDIA,PENDIENTE,17:30,2025-11-09
+915,Ciencias,Investigación,ALTA,PENDIENTE,19:14,2025-11-13
