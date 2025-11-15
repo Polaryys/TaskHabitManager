@@ -275,6 +275,17 @@ public class CompleteWindow extends JPanel { // cambio de jdialog a jpanel
         tableMedia.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tableBaja.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
+    // Style tables to match app look: fonts, header, row colors per priority
+    // Use BLACK text for Alta and Baja rows for better readability on light tints
+    styleTaskTable(tableAlta, Colours.B_Red, new Color(255, 220, 220), Color.BLACK, Color.WHITE);
+    styleTaskTable(tableMedia, COLOR_AMARILLO, new Color(255, 245, 210), Color.BLACK, Color.BLACK);
+    styleTaskTable(tableBaja, Colours.B_Green, new Color(220, 255, 220), Color.BLACK, Color.WHITE);
+
+    // Enable sorting by clicking columns
+    tableAlta.setRowSorter(new javax.swing.table.TableRowSorter<>(modelAlta));
+    tableMedia.setRowSorter(new javax.swing.table.TableRowSorter<>(modelMedia));
+    tableBaja.setRowSorter(new javax.swing.table.TableRowSorter<>(modelBaja));
+
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("ALTA (" + alta.size() + ")", new JScrollPane(tableAlta));
         tabs.addTab("MEDIA (" + media.size() + ")", new JScrollPane(tableMedia));
@@ -988,6 +999,49 @@ public class CompleteWindow extends JPanel { // cambio de jdialog a jpanel
             BorderFactory.createEmptyBorder(20, 20, 20, 20))
         );
         return panel;
+    }
+
+    // Estiliza una JTable para que coincida con la apariencia de la app
+    private void styleTaskTable(JTable table, Color headerBg, Color rowBg, Color rowText, Color headerText) {
+        // Header
+        javax.swing.table.JTableHeader header = table.getTableHeader();
+        header.setBackground(headerBg.darker());
+        header.setForeground(headerText);
+        header.setFont(FUENTE_TEXTO_PEQUENO.deriveFont(Font.BOLD, 14f));
+        header.setReorderingAllowed(false);
+
+        // Table overall
+        table.setFont(FUENTE_TEXTO_PEQUENO);
+        table.setForeground(rowText);
+        table.setRowHeight(28);
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setSelectionBackground(headerBg.darker());
+        table.setSelectionForeground(headerText);
+
+        // Cell renderer that paints non-selected rows with the provided rowBg and text color
+        javax.swing.table.DefaultTableCellRenderer cellRenderer = new javax.swing.table.DefaultTableCellRenderer() {
+            private final javax.swing.border.Border pad = BorderFactory.createEmptyBorder(2,8,2,8);
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (isSelected) {
+                    c.setBackground(table.getSelectionBackground());
+                    c.setForeground(table.getSelectionForeground());
+                } else {
+                    c.setBackground(rowBg);
+                    c.setForeground(rowText);
+                }
+                if (c instanceof JComponent) ((JComponent)c).setBorder(pad);
+                return c;
+            }
+        };
+
+        // Apply renderer to all columns
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
     }
 
     // ordena las tareas y habitos para mostrarlos en el orden correcto
