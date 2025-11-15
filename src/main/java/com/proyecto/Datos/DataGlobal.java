@@ -82,26 +82,50 @@ public class DataGlobal {
         return null;
     }
 
-    public Habito SearchHabitId(int id) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_HABITOS))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (Integer.parseInt(parts[0]) == id) {
+    public Habito SearchHabitId(int idBuscado) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_HABITOS))) {
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+
+            line = line.trim();
+            if (line.isEmpty()) continue; // evita líneas vacías
+
+            String[] parts = line.split(",");
+            if (parts.length < 6) continue; // evita líneas mal formadas
+
+            int id;
+            try {
+                id = Integer.parseInt(parts[0]);
+            } catch (NumberFormatException ex) {
+                continue; // evita IDs inválidos
+            }
+
+            if (id == idBuscado) {
+
+                try {
                     return new Habito(
-                            Integer.parseInt(parts[0]),
-                            parts[1],
-                            Actividad.State.valueOf(parts[3]),
-                            LocalDate.parse(parts[5]),
-                            LocalTime.parse(parts[4]),
-                            Habito.Frequency.valueOf(parts[2]));
+                            id,
+                            parts[1],                              // nombre
+                            Actividad.State.valueOf(parts[3]),     // estado
+                            LocalDate.parse(parts[5]),             // fecha
+                            LocalTime.parse(parts[4]),             // hora
+                            Habito.Frequency.valueOf(parts[2])     // frecuencia
+                    );
+                } catch (Exception ex) {
+                    System.out.println("Línea mal formada en hábitos: " + line);
+                    continue;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return null;
+
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+
+    return null;
+}
 
     public void DelTarea(int id) {
         eliminarLinea(FILE_PATH_TAREAS, id);
