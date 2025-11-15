@@ -118,8 +118,9 @@ public class ReportWindow extends JDialog {
             LocalDate inicioSemana = LocalDate.now().with(DayOfWeek.MONDAY);
             LocalDate finSemana = LocalDate.now().with(DayOfWeek.SUNDAY);
             
-            List<Tarea> tareasSemana = filtrarSemana(tareas, inicioSemana, finSemana);
-            List<Habito> habitosSemana = filtrarSemana(habitos, inicioSemana, finSemana);
+            // SOLUCIÓN: Usar filtros más flexibles
+            List<Tarea> tareasSemana = filtrarTareasRelevantes(tareas, inicioSemana, finSemana);
+            List<Habito> habitosSemana = filtrarHabitosRelevantes(habitos, inicioSemana, finSemana);
             
             agregarSeccion(crearEncabezado(), ESPACIO_VERTICAL_SECCIONES);
             agregarSeccion(crearResumen(tareasSemana, habitosSemana), ESPACIO_VERTICAL_SECCIONES);
@@ -446,9 +447,24 @@ public class ReportWindow extends JDialog {
         return lista.stream().filter(a -> a.getEstado() == Actividad.State.PENDIENTE).count();
     }
 
-    private <T extends Actividad> List<T> filtrarSemana(List<T> lista, LocalDate inicio, LocalDate fin) {
-        return lista.stream()
+    // SOLUCIÓN PRINCIPAL: Métodos de filtro corregidos
+    private List<Tarea> filtrarTareasRelevantes(List<Tarea> tareas, LocalDate inicio, LocalDate fin) {
+        return tareas.stream()
             .filter(a -> a != null && a.getFecha() != null)
+            // Incluir tareas de esta semana O tareas completadas recientemente
+            .filter(a -> {
+                boolean enRangoSemanal = !a.getFecha().isBefore(inicio) && !a.getFecha().isAfter(fin);
+                boolean completadaRecientemente = a.getEstado() == Actividad.State.COMPLETADO && 
+                                                a.getFecha().isAfter(inicio.minusWeeks(2)); // Últimas 2 semanas
+                return enRangoSemanal || completadaRecientemente;
+            })
+            .collect(Collectors.toList());
+    }
+
+    private List<Habito> filtrarHabitosRelevantes(List<Habito> habitos, LocalDate inicio, LocalDate fin) {
+        return habitos.stream()
+            .filter(a -> a != null && a.getFecha() != null)
+            // Para hábitos, mantener el filtro original de esta semana
             .filter(a -> !a.getFecha().isBefore(inicio) && !a.getFecha().isAfter(fin))
             .collect(Collectors.toList());
     }
@@ -506,8 +522,9 @@ public class ReportWindow extends JDialog {
                 LocalDate inicioSemana = LocalDate.now().with(DayOfWeek.MONDAY);
                 LocalDate finSemana = LocalDate.now().with(DayOfWeek.SUNDAY);
                 
-                List<Tarea> tareasSemana = filtrarSemana(tareas, inicioSemana, finSemana);
-                List<Habito> habitosSemana = filtrarSemana(habitos, inicioSemana, finSemana);
+                // Usar los mismos filtros corregidos
+                List<Tarea> tareasSemana = filtrarTareasRelevantes(tareas, inicioSemana, finSemana);
+                List<Habito> habitosSemana = filtrarHabitosRelevantes(habitos, inicioSemana, finSemana);
                 
                 DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 
