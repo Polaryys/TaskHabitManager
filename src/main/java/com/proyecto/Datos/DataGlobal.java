@@ -42,14 +42,31 @@ public class DataGlobal {
         }
     }
 
-    public Tarea SearchTaskId(int id) {
+    public Tarea SearchTaskId(int idBuscado) {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_TAREAS))) {
             String line;
+
             while ((line = reader.readLine()) != null) {
+
+                line = line.trim();
+                if (line.isEmpty())
+                    continue;
+
                 String[] parts = line.split(",");
-                if (Integer.parseInt(parts[0]) == id) {
+
+                if (parts.length < 7)
+                    continue; 
+
+                int id;
+                try {
+                    id = Integer.parseInt(parts[0]);
+                } catch (NumberFormatException e) {
+                    continue; 
+                }
+
+                if (id == idBuscado) {
                     return new Tarea(
-                            Integer.parseInt(parts[0]),
+                            id,
                             parts[1],
                             Actividad.State.valueOf(parts[4]),
                             LocalDate.parse(parts[6]),
@@ -61,6 +78,7 @@ public class DataGlobal {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -93,39 +111,40 @@ public class DataGlobal {
         eliminarLinea(FILE_PATH_HABITOS, id);
     }
 
-private boolean eliminarLinea(String filePath, int id) {
-    File originalFile = new File(filePath);
-    File tempFile = new File(filePath + ".tmp");
+    private boolean eliminarLinea(String filePath, int id) {
+        File originalFile = new File(filePath);
+        File tempFile = new File(filePath + ".tmp");
 
-    boolean deleted = false;
+        boolean deleted = false;
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
-         BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
 
-        String line;
-        while ((line = reader.readLine()) != null) {
+            String line;
+            while ((line = reader.readLine()) != null) {
 
-            if (line.trim().isEmpty()) continue; // Línea vacía = se salta
+                if (line.trim().isEmpty())
+                    continue; // Línea vacía = se salta
 
-            String[] parts = line.trim().split("\\s*,\\s*");
-            int lineId = Integer.parseInt(parts[0]);
+                String[] parts = line.trim().split("\\s*,\\s*");
+                int lineId = Integer.parseInt(parts[0]);
 
-            if (lineId != id) {
-                writer.write(line);
-                writer.newLine();
-            } else {
-                deleted = true;
+                if (lineId != id) {
+                    writer.write(line);
+                    writer.newLine();
+                } else {
+                    deleted = true;
+                }
             }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
         }
-    } catch (IOException | NumberFormatException e) {
-        e.printStackTrace();
+
+        originalFile.delete();
+        tempFile.renameTo(originalFile);
+
+        return deleted;
     }
-
-    originalFile.delete();
-    tempFile.renameTo(originalFile);
-
-    return deleted;
-}
 
     public static boolean updateTarea(Tarea tareaActualizada) {
         File original = new File(FILE_PATH_TAREAS);
@@ -230,16 +249,21 @@ private boolean eliminarLinea(String filePath, int id) {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH_TAREAS))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) continue;
+                if (line.trim().isEmpty())
+                    continue;
                 String[] parts = line.split(",");
                 try {
                     int id = Integer.parseInt(parts[0]);
                     String nombre = parts.length > 1 ? parts[1] : "";
                     String descripcion = parts.length > 2 ? parts[2] : "";
-                    Tarea.Priority prioridad = parts.length > 3 ? Tarea.Priority.valueOf(parts[3]) : Tarea.Priority.MEDIA;
-                    Actividad.State estado = parts.length > 4 ? Actividad.State.valueOf(parts[4]) : Actividad.State.PENDIENTE;
-                    java.time.LocalTime hora = parts.length > 5 ? java.time.LocalTime.parse(parts[5]) : java.time.LocalTime.of(0,0);
-                    java.time.LocalDate fecha = parts.length > 6 ? java.time.LocalDate.parse(parts[6]) : java.time.LocalDate.now();
+                    Tarea.Priority prioridad = parts.length > 3 ? Tarea.Priority.valueOf(parts[3])
+                            : Tarea.Priority.MEDIA;
+                    Actividad.State estado = parts.length > 4 ? Actividad.State.valueOf(parts[4])
+                            : Actividad.State.PENDIENTE;
+                    java.time.LocalTime hora = parts.length > 5 ? java.time.LocalTime.parse(parts[5])
+                            : java.time.LocalTime.of(0, 0);
+                    java.time.LocalDate fecha = parts.length > 6 ? java.time.LocalDate.parse(parts[6])
+                            : java.time.LocalDate.now();
 
                     Tarea t = new Tarea(id, nombre, estado, fecha, hora, descripcion, prioridad);
                     tareas.add(t);
