@@ -207,41 +207,64 @@ public class DataGlobal {
     }
 
     public boolean updateHabito(Habito habitoActualizado) {
-        boolean actualizado = false;
-        File originalFile = new File(FILE_PATH_HABITOS);
-        File tempFile = new File(FILE_PATH_HABITOS + ".tmp");
+    boolean actualizado = false;
+    File originalFile = new File(FILE_PATH_HABITOS);
+    File tempFile = new File(FILE_PATH_HABITOS + ".tmp");
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(originalFile));
+         BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                int id = Integer.parseInt(parts[0]);
+        String line;
+        while ((line = reader.readLine()) != null) {
 
-                if (id == habitoActualizado.getId()) {
-                    writer.write(String.format("%d,%s,%s,%s,%s,%s%n",
-                            habitoActualizado.getId(),
-                            habitoActualizado.getNombre(),
-                            habitoActualizado.getFrecuencia(),
-                            habitoActualizado.getEstado(),
-                            habitoActualizado.getHora(),
-                            habitoActualizado.getFecha()));
-                    actualizado = true;
-                } else {
-                    writer.write(line + System.lineSeparator());
-                }
+            // Evitar errores con líneas mal formadas o vacías
+            if (line.trim().isEmpty()) {
+                writer.write(line + System.lineSeparator());
+                continue;
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            String[] parts = line.split(",");
+
+            if (parts.length < 6) {
+                writer.write(line + System.lineSeparator());
+                continue;
+            }
+
+            int id;
+            try {
+                id = Integer.parseInt(parts[0]);
+            } catch (NumberFormatException nfe) {
+                writer.write(line + System.lineSeparator());
+                continue;
+            }
+
+            // Actualiza la línea del hábito
+            if (id == habitoActualizado.getId()) {
+                writer.write(String.format("%d,%s,%s,%s,%s,%s%n",
+                        habitoActualizado.getId(),
+                        habitoActualizado.getNombre(),
+                        habitoActualizado.getFrecuencia(),
+                        habitoActualizado.getEstado(),
+                        habitoActualizado.getHora(),
+                        habitoActualizado.getFecha()));
+                actualizado = true;
+            } else {
+                writer.write(line + System.lineSeparator());
+            }
         }
 
-        originalFile.delete();
-        tempFile.renameTo(originalFile);
-
-        return actualizado;
+    } catch (IOException e) {
+        e.printStackTrace();
+        return false;
     }
+
+    // Reemplazar archivo original
+    originalFile.delete();
+    tempFile.renameTo(originalFile);
+
+    return actualizado;
+}
+
 
     // Método que retorna una lista con todas las tareas
     public List<Tarea> obtenerTareasList() {
